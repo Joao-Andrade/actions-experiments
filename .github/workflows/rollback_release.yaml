@@ -1,0 +1,25 @@
+name: Create rollback pull request
+on:
+  release:
+    types: [published]
+
+env:
+  APP_NAME: 'aaaa'
+  DOCKER_REGISTRY: 'bbbb'
+  #GITHUB_TOKEN: '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'
+
+jobs:
+  # maybe needs a step to check if release was a rollback or no
+  rollback-please:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+    #- name: Checkout code
+    #  uses: actions/checkout@v3
+    - name: Check previous version
+      run: echo "${{ github.repository }}" | gh release list
+    #- name: checkout code to previous release version
+    #  run: git checkout v1.0.0'
+
