@@ -19,8 +19,7 @@ jobs:
     - uses: google-github-actions/release-please-action@v3
       id: release
       with:
-        release-type: node
-        package-name: xlsx-calculation-service
+        release-type: simple
 
     - name: Checkout code
       uses: actions/checkout@v3
