@@ -25,13 +25,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: grab package json version
-      id: package-json-version
-      uses: ashley-taylor/read-json-property-action@v1.0
-      with:
-        path: package.json
-        property: version
-
   rollback-latest-release:
     name: ArgoCD Rollback Latest Deployment to Production
     runs-on: ubuntu-latest
