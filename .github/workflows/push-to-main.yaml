@@ -27,6 +27,8 @@ jobs:
   rollback-latest-release:
     name: ArgoCD Rollback Latest Deployment to Production
     runs-on: ubuntu-latest
+    needs:
+      - release-please
     steps:
     - run: echo "hello world"    
 
