@@ -61,6 +61,8 @@ jobs:
     - name: Change branch to rollback-branch
       run: git checkout -b rollback-branch
     - name: Change version on version files
-      run: echo "${{ env.RELEASE_TYPE }}"
+      run: |
+        echo "A."
+        echo "${{ env.RELEASE_TYPE }}"
     # create pull request with changes to latest good version on version.txt and stuff
 
