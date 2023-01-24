@@ -21,7 +21,7 @@ jobs:
     #  run: git checkout v1.0.0'
     - name: Check if rollback
       run: |
-        was_rollback=$(echo "${{ github.event.head_commit.message }}")
+        was_rollback=$(echo "${{ github.event.head_commit.message }}" | grep rollback-branch)
         if [ -z was_rollback ]; then
           echo "Not rollback. Exiting."
           exit 0
