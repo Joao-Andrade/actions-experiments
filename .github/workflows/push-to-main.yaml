@@ -93,6 +93,4 @@ jobs:
           This will **not** revert changes on main branch. What it does: \
           - Change version files to place the previous version. \
           - Update argocd deployment so it uses the previous version again."
-        
-    # create pull request with changes to latest good version on version.txt and stuff
 
