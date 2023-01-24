@@ -7,7 +7,7 @@ on:
 env:
   APP_NAME: 'aaaa'
   DOCKER_REGISTRY: 'bbbb'
-  #GITHUB_TOKEN: 'cccc'
+  GITHUB_TOKEN: 'a'
 
 jobs:
   release-please:
@@ -33,7 +33,8 @@ jobs:
     needs:
       - release-please
     steps:
-    - run: echo "hello world! Release created - ${{ needs.release-please.outputs.release_created }}"
+    - name: step1 
       with:
         release_created: ${{ needs.release-please.outputs.release_created == 'true' }} # required
+      run: echo "hello world! Release created - ${{ needs.release-please.outputs.release_created }}"
 
