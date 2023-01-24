@@ -1,12 +1,13 @@
 name: Create rollback pull request
 on:
   release:
-    types: [published, released, prereleased]
+    types: [published, released, prereleased,created,edited,unpublished]
 
 env:
   APP_NAME: 'aaaa'
   DOCKER_REGISTRY: 'bbbb'
   #GITHUB_TOKEN: 'aaaa'
+  GH_TOKEN: ${{ github.token }}
 
 jobs:
   # maybe needs a step to check if release was a rollback or no
