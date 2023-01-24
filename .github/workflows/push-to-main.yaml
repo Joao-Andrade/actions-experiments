@@ -84,6 +84,7 @@ jobs:
       run: |
         git config --global user.name "actions-bot"
         git config user.email 'github-actions-bot@google.com'
+        git push --set-upstream origin rollback-branch
         git commit -m "Rollback version: from v1.0.0 to ${{ needs.get-latest-stable-release.outputs.prev_release }}"
         gh pr create --title "Rollback to version ${{ needs.get-latest-stable-release.outputs.prev_release }}" \
           --body "If current version is not working, use this pull request to revert the version deployed to ${{ needs.get-latest-stable-release.outputs.prev_release }}. \
