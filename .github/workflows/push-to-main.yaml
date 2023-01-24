@@ -98,7 +98,7 @@ jobs:
           # force to override the branch with the new stuff
           git push --set-upstream origin rollback-branch --force
         fi
-        pull_request_number=$(gh pr list -s open -H rollback-branch --json id --jq '.[].id')
+        pull_request_number=$(gh pr list -s open -H rollback-branch --json number --jq '.[].number')
         # if no pull request exists. Create one.
         if [ -z $pull_request_number ]; then
           gh pr create --title "$pr_title" --body "$pr_body"
