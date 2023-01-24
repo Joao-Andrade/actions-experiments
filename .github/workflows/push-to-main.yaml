@@ -54,7 +54,7 @@ jobs:
     needs:
       - get-latest-stable-release
       - release-please
-    if: ${{ needs.release-please.outputs.release_created == true }}
+    if: ${{ needs.release-please.outputs.release_created == "true" }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
