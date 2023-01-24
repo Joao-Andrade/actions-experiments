@@ -1,9 +1,9 @@
 name: Push to main
 on:
   - push
-  #push:
-    #branches:
-    #  - main
+  push:
+    branches:
+      - main
 
 env:
   GH_TOKEN: ${{ github.token }}
@@ -29,23 +29,23 @@ jobs:
           echo "PREV_RELEASE=$(gh release list | awk '$2 == "Latest"' | awk '{print $1}')" >>  $GITHUB_OUTPUT
 
 
-  #release-please:
-  #  runs-on: ubuntu-latest
-  #  needs:
-  #    - get-latest-stable-release
-  #  permissions:
-  #    contents: write
-  #    pull-requests: write
-  #  outputs:
-  #    release_created: ${{ steps.release.outputs.release_created || false }}
-  #    version_tag: "${{ steps.release.outputs.release_created && format('{0}.{1}.{2}',steps.release.outputs.major,steps.release.outputs.minor,steps.release.outputs.patch) || steps.package-json-version.outputs.value }}"
-  #  steps:
-  #  - uses: google-github-actions/release-please-action@v3
-  #    id: release
-  #    with:
-  #      release-type: ${{ env.RELEASE_TYPE }}
-  #  - name: Checkout code
-  #    uses: actions/checkout@v3
+  release-please:
+    runs-on: ubuntu-latest
+    needs:
+      - get-latest-stable-release
+    permissions:
+      contents: write
+      pull-requests: write
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created || false }}
+      version_tag: "${{ steps.release.outputs.release_created && format('{0}.{1}.{2}',steps.release.outputs.major,steps.release.outputs.minor,steps.release.outputs.patch) || steps.package-json-version.outputs.value }}"
+    steps:
+    - uses: google-github-actions/release-please-action@v3
+      id: release
+      with:
+        release-type: ${{ env.RELEASE_TYPE }}
+    - name: Checkout code
+      uses: actions/checkout@v3
 
 
   rollback-latest-release:
@@ -53,13 +53,15 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - get-latest-stable-release
-      #- release-please
-    #${{ needs.release-please.outputs.release_created }}
+      - release-please
+    if: ${{ needs.release-please.outputs.release_created == true }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
     - name: Checkout to previous version
       run: echo "Previous version -> ${{ needs.get-latest-stable-release.outputs.prev_release }}"
+    - name: Check version
+      run: echo "Version -> ${{ needs.release-please.outputs.version_tag }}"
     - name: Change branch to rollback-branch
       run: git checkout -b rollback-branch
     - name: Change version on version files
