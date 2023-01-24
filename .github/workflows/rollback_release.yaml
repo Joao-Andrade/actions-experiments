@@ -22,9 +22,4 @@ jobs:
     - name: Check if rollback
       run: |
         was_rollback=$(echo "A" | grep 'Merge pull request #' | grep rollback-branch)
-        if [ -z was_rollback ]; then
-          echo "Not rollback. Exiting."
-          exit 0
-        fi
-        echo "Rollback."
 
