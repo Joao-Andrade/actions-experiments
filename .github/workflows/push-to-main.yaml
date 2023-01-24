@@ -78,7 +78,7 @@ jobs:
     - name: Update Changelog
       run: |
         current_time=`date +%Y-%m-%d`
-        sed "1s/.*/Changelog\n\n### Rollback\n\n* Rollback to version ${{ needs.get-latest-stable-release.outputs.prev_release }} ($current_time)\n/" CHANGELOG.md
+        sed "1s/.*/Changelog\n\n### Rollback\n\n* Rollback to version ${{ needs.get-latest-stable-release.outputs.prev_release }} ($current_time)\n/" CHANGELOG.md > CHANGELOG.md
         git add CHANGELOG.md
     - name: create pull request
       run: |
