@@ -1,18 +1,38 @@
 name: Push to main
 on:
+  #- push
   push:
     branches:
       - main
 
 env:
   GH_TOKEN: ${{ github.token }}
+  RELEASE_TYPE: simple
 #  APP_NAME: 'aaaa'
 #  DOCKER_REGISTRY: 'bbbb'
 #  GITHUB_TOKEN: 'a'
 
 jobs:
+  get-latest-stable-release:
+    name: Get current latest release version
+    runs-on: ubuntu-latest
+    outputs:
+      prev_release: ${{ steps.prev_release.outputs.PREV_RELEASE }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Get previous release
+        id: prev_release
+        run: |
+          # print to console then to the output variable.
+          echo "PREV_RELEASE=$(gh release list | awk '$2 == "Latest"' | awk '{print $1}')"
+          echo "PREV_RELEASE=$(gh release list | awk '$2 == "Latest"' | awk '{print $1}')" >>  $GITHUB_OUTPUT
+
+
   release-please:
     runs-on: ubuntu-latest
+    needs:
+      - get-latest-stable-release
     permissions:
       contents: write
       pull-requests: write
@@ -23,23 +43,56 @@ jobs:
     - uses: google-github-actions/release-please-action@v3
       id: release
       with:
-        release-type: simple
-
+        release-type: ${{ env.RELEASE_TYPE }}
     - name: Checkout code
       uses: actions/checkout@v3
 
+
   rollback-latest-release:
-    name: ArgoCD Rollback Latest Deployment to Production
+    name: Create rollback pull request
     runs-on: ubuntu-latest
     needs:
+      - get-latest-stable-release
       - release-please
-    #${{ needs.release-please.outputs.release_created }}
+    if: ${{ needs.release-please.outputs.release_created == true }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-    - name: Get previous released version
-      id: prev_release
-      run: echo "PREV_RELEASE=$(gh release list -L 2 | tail -n 1 | awk '{print $1}')" >>  $GITHUB_OUTPUT
     - name: Checkout to previous version
-      run: echo "Previous version -> ${{ steps.prev_release.outputs.PREV_RELEASE }}"
+      run: echo "Previous version -> ${{ needs.get-latest-stable-release.outputs.prev_release }}"
+    - name: Check version
+      run: echo "Version -> ${{ needs.release-please.outputs.version_tag }}"
+    - name: Change branch to rollback-branch
+      run: git checkout -b rollback-branch
+    - name: Change version on version files
+      run: |
+        case ${{ env.RELEASE_TYPE }} in
+          simple)
+            # remove letter v from the version and change it on the version file.
+            echo "${{ needs.get-latest-stable-release.outputs.prev_release }}" | sed 's/^.//' > version.txt
+            git add version.txt
+            ;;
+          *)
+            echo "release type '${{ env.RELEASE_TYPE }}' not valid."
+            exit 1
+            ;;
+        esac
+    - name: Update Changelog
+      run: |
+        current_time=`date +%Y-%m-%d`
+        sed -i "1s/.*/# Changelog\n\n### Rollback\n\n* Rollback to version ${{ needs.get-latest-stable-release.outputs.prev_release }} ($current_time)\n/" CHANGELOG.md
+        git add CHANGELOG.md
+    - name: create pull request
+      run: |
+        git config --global user.name "actions-bot"
+        git config user.email 'github-actions-bot@google.com'
+        git commit -m "Rollback version: from v1.0.0 to ${{ needs.get-latest-stable-release.outputs.prev_release }}"
+        git push --set-upstream origin rollback-branch
+        gh pr create --title "Rollback to version ${{ needs.get-latest-stable-release.outputs.prev_release }}" \
+          --body "If current version is not working, use this pull request to revert the version deployed to ${{ needs.get-latest-stable-release.outputs.prev_release }}. \
+          This will **not** revert changes on main branch. What it does: \
+          - Change version files to place the previous version. \
+          - Update argocd deployment so it uses the previous version again."
+        
+    # create pull request with changes to latest good version on version.txt and stuff
 
