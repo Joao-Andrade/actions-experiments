@@ -18,6 +18,8 @@ jobs:
     outputs:
       prev_release: $ {{ steps.prev_release.outputs.PREV_RELEASE }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
       - name: Get previous release
         id: prev_release
         run: echo "PREV_RELEASE=$(gh release list | awk '$2 == "Latest"' | awk '{print $1}'" >>  $GITHUB_OUTPUT
