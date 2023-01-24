@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.7.0](https://github.com/Joao-Andrade/actions-experiments/compare/v1.6.0...v1.7.0) (2023-01-24)
+
+
+### Features
+
+* a feat ([cb39213](https://github.com/Joao-Andrade/actions-experiments/commit/cb39213ac2cc72575fd45ba9593c96dd22e5826b))
+* a feat ([b1842c5](https://github.com/Joao-Andrade/actions-experiments/commit/b1842c58154df5949ccca75144afc5522a43e50d))
+* a feat ([2db219a](https://github.com/Joao-Andrade/actions-experiments/commit/2db219a088df700600adfbd3fed35820710aca2b))
+
 ## [1.6.0](https://github.com/Joao-Andrade/actions-experiments/compare/v1.5.0...v1.6.0) (2023-01-24)
 
 
