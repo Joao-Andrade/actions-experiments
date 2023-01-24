@@ -1,13 +1,14 @@
 name: Push to main
 on:
-  #- push
-  push:
-    branches:
-      - main
+  - push
+  #push:
+  #  branches:
+  #    - main
 
 env:
   GH_TOKEN: ${{ github.token }}
   RELEASE_TYPE: simple
+  release-please-execute: false
 #  APP_NAME: 'aaaa'
 #  DOCKER_REGISTRY: 'bbbb'
 #  GITHUB_TOKEN: 'a'
@@ -39,6 +40,7 @@ jobs:
     outputs:
       release_created: ${{ steps.release.outputs.release_created || false }}
       version_tag: "${{ steps.release.outputs.release_created && format('{0}.{1}.{2}',steps.release.outputs.major,steps.release.outputs.minor,steps.release.outputs.patch) || steps.package-json-version.outputs.value }}"
+    if: ${{ env.release-please-execute == 'true' }}
     steps:
     - uses: google-github-actions/release-please-action@v3
       id: release
@@ -53,8 +55,8 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - get-latest-stable-release
-      - release-please
-    if: ${{ needs.release-please.outputs.release_created == 'true' }}
+      #- release-please
+    #if: ${{ needs.release-please.outputs.release_created == 'true' }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -95,10 +97,11 @@ jobs:
           # force to override the branch with the new stuff
           git push --set-upstream origin rollback-branch --force
         fi
-        #pull_request_exists=$(gh pr list | grep rollback)
-        gh pr create --title "Rollback to version ${{ needs.get-latest-stable-release.outputs.prev_release }}" \
-          --body "If current version is not working, use this pull request to revert the version deployed to ${{ needs.get-latest-stable-release.outputs.prev_release }}. \
-          This will **not** revert changes on main branch. What it does: \
-          - Change version files to place the previous version. \
-          - Update argocd deployment so it uses the previous version again."
+        pull_request_exists=$(gh pr list -s open -H rollback-branch)
+        echo "$pull_request_exists"
+        #gh pr create --title "Rollback to version ${{ needs.get-latest-stable-release.outputs.prev_release }}" \
+        #  --body "If current version is not working, use this pull request to revert the version deployed to ${{ needs.get-latest-stable-release.outputs.prev_release }}. \
+        #  This will **not** revert changes on main branch. What it does: \
+        #  - Change version files to place the previous version. \
+        #  - Update argocd deployment so it uses the previous version again."
 
