@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.0](https://github.com/Joao-Andrade/actions-experiments/compare/v1.10.0...v1.11.0) (2023-01-24)
+
+
+### Features
+
+* a feat. ([ae34240](https://github.com/Joao-Andrade/actions-experiments/commit/ae342408a9bc951af5410a965f47ecba1a86472c))
+
 ## [1.10.0](https://github.com/Joao-Andrade/actions-experiments/compare/v1.9.0...v1.10.0) (2023-01-24)
 
 
