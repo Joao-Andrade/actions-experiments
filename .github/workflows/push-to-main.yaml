@@ -7,7 +7,7 @@ on:
 
 env:
   GH_TOKEN: ${{ github.token }}
-  RELEASE_TYPE: simples
+  RELEASE_TYPE: simple
 #  APP_NAME: 'aaaa'
 #  DOCKER_REGISTRY: 'bbbb'
 #  GITHUB_TOKEN: 'a'
@@ -64,16 +64,27 @@ jobs:
       run: git checkout -b rollback-branch
     - name: Change version on version files
       run: |
-        echo "A."
-        echo "${{ env.RELEASE_TYPE }}"
         case ${{ env.RELEASE_TYPE }} in
           simple)
-            echo "Simple release type."
+            # remove letter v from the version and change it on the version file.
+            echo "${{ needs.get-latest-stable-release.outputs.prev_release }}" | sed 's/^.//' > version.txt
             ;;
           *)
             echo "release type '${{ env.RELEASE_TYPE }}' not valid."
             exit 1
             ;;
         esac
+    - name: Update Changelog
+      run: |
+        current_time=`date +%Y-%m-%d`
+        sed "1s/.*/Changelog\n\n### Rollback\n\n* Rollback to version v1.0.0 ($current_time)\n/" CHANGELOG.md
+    - name: create pull request
+      run: |
+        gh pr create --title "Rollback to version ${{ needs.get-latest-stable-release.outputs.prev_release }}" \
+          --body "If current version is not working, use this pull request to revert the version deployed. \
+          This will **not** revert changes on main branch. What it does: \
+          - Change version files to place the previous version. \
+          - Update argocd deployment so it uses the previous version again."
+        
     # create pull request with changes to latest good version on version.txt and stuff
 
