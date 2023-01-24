@@ -1,5 +1,10 @@
 # Changelog
 
+### Rollback
+
+* Rollback to version v1.14.0 (2023-01-24)
+
+
 ## [1.15.0](https://github.com/Joao-Andrade/actions-experiments/compare/v1.14.0...v1.15.0) (2023-01-24)
 
 
