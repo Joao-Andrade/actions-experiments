@@ -8,7 +8,7 @@ on:
 env:
   GH_TOKEN: ${{ github.token }}
   RELEASE_TYPE: simple
-  release-please-execute: false
+  release-please-execute: "false"
 #  APP_NAME: 'aaaa'
 #  DOCKER_REGISTRY: 'bbbb'
 #  GITHUB_TOKEN: 'a'
