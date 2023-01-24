@@ -33,5 +33,7 @@ jobs:
     needs:
       - release-please
     steps:
-    - run: echo "hello world"    
+    - run: echo "hello world! Release created - ${{ needs.release-please.outputs.release_created }}"
+      with:
+        release_created: ${{ needs.release-please.outputs.release_created == 'true' }} # required
 
