@@ -1,7 +1,7 @@
 name: Create rollback pull request
 on:
   release:
-    types: [created]
+    types: [published, released, prereleased]
 
 env:
   APP_NAME: 'aaaa'
