@@ -78,14 +78,14 @@ jobs:
     - name: Update Changelog
       run: |
         current_time=`date +%Y-%m-%d`
-        sed "1s/.*/Changelog\n\n### Rollback\n\n* Rollback to version v1.0.0 ($current_time)\n/" CHANGELOG.md
+        sed "1s/.*/Changelog\n\n### Rollback\n\n* Rollback to version ${{ needs.get-latest-stable-release.outputs.prev_release }} ($current_time)\n/" CHANGELOG.md
         git add CHANGELOG.md
     - name: create pull request
       run: |
         git config --global user.name "actions-bot"
         git config user.email 'github-actions-bot@google.com'
-        git push --set-upstream origin rollback-branch
         git commit -m "Rollback version: from v1.0.0 to ${{ needs.get-latest-stable-release.outputs.prev_release }}"
+        git push --set-upstream origin rollback-branch
         gh pr create --title "Rollback to version ${{ needs.get-latest-stable-release.outputs.prev_release }}" \
           --body "If current version is not working, use this pull request to revert the version deployed to ${{ needs.get-latest-stable-release.outputs.prev_release }}. \
           This will **not** revert changes on main branch. What it does: \
