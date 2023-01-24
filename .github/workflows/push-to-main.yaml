@@ -60,8 +60,6 @@ jobs:
       uses: actions/checkout@v3
     - name: Checkout to previous version
       run: echo "Previous version -> ${{ needs.get-latest-stable-release.outputs.prev_release }}"
-    - name: Check version
-      run: echo "Version -> ${{ needs.release-please.outputs.version_tag }}"
     - name: Change branch to rollback-branch
       run: git checkout -b rollback-branch
     - name: Change version on version files
@@ -87,6 +85,11 @@ jobs:
         git config --global user.name "actions-bot"
         git config user.email 'github-actions-bot@google.com'
         git commit -m "Rollback version: from v1.0.0 to ${{ needs.get-latest-stable-release.outputs.prev_release }}"
+        pr_title="Rollback version from ${{ needs.release-please.outputs.version_tag }} to ${{ needs.get-latest-stable-release.outputs.prev_release }}"
+        pr_body="If current version is not working, use this pull request to revert the version deployed from ${{ needs.release-please.outputs.version_tag }} to ${{ needs.get-latest-stable-release.outputs.prev_release }}. \
+            This will **not** revert changes on main branch. What it does: \n \
+            - Change version files to place the previous version. \
+            - Update argocd deployment so it uses the previous version again."
         # check if branch already exists
         branch_exists=$(git branch | grep -w rollback-branch)
         if [ -z $branch_exists ];then
@@ -95,11 +98,13 @@ jobs:
           # force to override the branch with the new stuff
           git push --set-upstream origin rollback-branch --force
         fi
-        pull_request_exists=$(gh pr list -s open -H rollback-branch)
-        echo "$pull_request_exists"
-        #gh pr create --title "Rollback to version ${{ needs.get-latest-stable-release.outputs.prev_release }}" \
-        #  --body "If current version is not working, use this pull request to revert the version deployed to ${{ needs.get-latest-stable-release.outputs.prev_release }}. \
-        #  This will **not** revert changes on main branch. What it does: \
-        #  - Change version files to place the previous version. \
-        #  - Update argocd deployment so it uses the previous version again."
+        pull_request_number=$(gh pr list -s open -H rollback-branch --json id --jq '.[].id')
+        # if no pull request exists. Create one.
+        if [ -z $pull_request_number ]; then
+          gh pr create --title "$pr_title" --body "$pr_body"
+        # Pull request exists. Update existing one.
+        else
+          gh pr edit $pull_request_number --title "$pr_title" --body "$pr_body"
+        fi
+        
 
