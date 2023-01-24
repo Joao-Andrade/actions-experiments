@@ -2,6 +2,11 @@
 
 ### Rollback
 
+* Rollback to version v1.15.0 (2023-01-24)
+
+
+### Rollback
+
 * Rollback to version v1.14.0 (2023-01-24)
 
 
