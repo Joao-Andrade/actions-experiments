@@ -1,8 +1,9 @@
 name: Push to main
 on:
-  push:
-    branches:
-      - main
+  - push
+  #push:
+    #branches:
+    #  - main
 
 env:
   GH_TOKEN: ${{ github.token }}
@@ -11,35 +12,49 @@ env:
 #  GITHUB_TOKEN: 'a'
 
 jobs:
-  release-please:
+  get-latest-stable-release:
+    name: Get current latest release version
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
     outputs:
-      release_created: ${{ steps.release.outputs.release_created || false }}
-      version_tag: "${{ steps.release.outputs.release_created && format('{0}.{1}.{2}',steps.release.outputs.major,steps.release.outputs.minor,steps.release.outputs.patch) || steps.package-json-version.outputs.value }}"
+      prev_release: $ {{ steps.prev_release.outputs.PREV_RELEASE }}
     steps:
-    - uses: google-github-actions/release-please-action@v3
-      id: release
-      with:
-        release-type: simple
+      - name: Get previous release
+        id: prev_release
+        run: echo "PREV_RELEASE=$(gh release list | awk '$2 == "Latest"' | awk '{print $1}'" >>  $GITHUB_OUTPUT
+        # get this to output
 
-    - name: Checkout code
-      uses: actions/checkout@v3
+
+  #release-please:
+  #  runs-on: ubuntu-latest
+  #  needs:
+  #    - get-latest-stable-release
+  #  permissions:
+  #    contents: write
+  #    pull-requests: write
+  #  outputs:
+  #    release_created: ${{ steps.release.outputs.release_created || false }}
+  #    version_tag: "${{ steps.release.outputs.release_created && format('{0}.{1}.{2}',steps.release.outputs.major,steps.release.outputs.minor,steps.release.outputs.patch) || steps.package-json-version.outputs.value }}"
+  #  steps:
+  #  - uses: google-github-actions/release-please-action@v3
+  #    id: release
+  #    with:
+  #      release-type: simple
+
+  # - name: Checkout code
+  #   uses: actions/checkout@v3
+
 
   rollback-latest-release:
     name: ArgoCD Rollback Latest Deployment to Production
     runs-on: ubuntu-latest
     needs:
+      - get-latest-stable-release
       - release-please
     #${{ needs.release-please.outputs.release_created }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-    - name: Get previous released version
-      id: prev_release
-      run: echo "PREV_RELEASE=$(gh release list -L 2 | tail -n 1 | awk '{print $1}')" >>  $GITHUB_OUTPUT
     - name: Checkout to previous version
-      run: echo "Previous version -> ${{ steps.prev_release.outputs.PREV_RELEASE }}"
+      run: echo "Previous version -> ${{ needs.get-latest-stable-release.outputs.prev_release }}"
+    # create pull request with changes to latest good version on version.txt and stuff
 
