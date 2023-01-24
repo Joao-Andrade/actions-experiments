@@ -14,7 +14,7 @@ env:
 
 jobs:
   get-latest-stable-release:
-    name: Get current latest release version
+    name: Get last stable version
     runs-on: ubuntu-latest
     outputs:
       prev_release: ${{ steps.prev_release.outputs.PREV_RELEASE }}
