@@ -35,6 +35,8 @@ jobs:
       - release-please
     #${{ needs.release-please.outputs.release_created }}
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
     - name: Get previous released version
       id: prev_release
       run: echo "PREV_RELEASE=$(gh release list -L 2 | tail -n 1 | awk '{print $1}')" >>  $GITHUB_OUTPUT
