@@ -54,8 +54,8 @@ jobs:
         echo "Broken version: $broken_version"
         prev_version="{{ needs.choosing_action.outputs.rollback_previous_version }}"
         echo "Previous version: $prev_version"
-        gh release edit $prev_version --latest
-        gh release edit $broken_version --title ${broken_version}-broken
+        #gh release edit $prev_version --latest
+        #gh release edit $broken_version --title ${broken_version}-broken
 
   get-latest-stable-release-version:
     name: Get last stable version
