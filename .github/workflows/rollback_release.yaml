@@ -1,6 +1,6 @@
 name: Rollback versions
 on:
- # - push
+  #- push
  push:
     branches:
       - main
@@ -13,13 +13,20 @@ jobs:
   rollback-please:
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
     - name: Check if rollback
       run: |
-        message=$(echo "${{ github.event.head_commit.message }}" | { grep "Merge pull request #" || echo ""; } | { grep "rollback-branch" || echo ""; })
-        if [ -z "$message" ]; then
+        message=$(echo "${{ github.event.head_commit.message }}")
+        is_rollback=$(echo "$message" | { grep "Merge pull request #" || echo ""; } | { grep "rollback-branch" || echo ""; })
+        if [ -z "$is_rollback" ]; then
           echo "Not rollback. Exiting."
           exit 0
         fi
-        echo "Rollingback to version vx.y.z."
-        gh release edit v1.7.0 --latest
-
+        echo "Commit message: $message"
+        broken_version="v"$(echo "$message" | tail -n1 | sed 's/.*Rollback version from //' | sed 's/ to.*//')
+        echo "Broken version: $broken_version"
+        prev_version="v${message##*v}"
+        echo "Previous version: $prev_version"
+        gh release edit $prev_version --latest
+        gh release edit $broken_version --title ${broken_version}-broken
