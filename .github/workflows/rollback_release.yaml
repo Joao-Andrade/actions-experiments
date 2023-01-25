@@ -21,7 +21,7 @@ jobs:
     #  run: git checkout v1.0.0'
     - name: Check if rollback
       run: |
-        message=$(echo "${{ github.event.head_commit.message }}" | { grep -w "Merge pull request #" || true; } | { grep -w "rollback-branch" || true; })
+        message=$(echo "${{ github.event.head_commit.message }}" | { grep -w "Merge pull request #" || echo ""; } | { grep -w "rollback-branch" || echo ""; })
         if [ -z $message ]; then
           echo "Not rollback. Exiting."
           exit 0
