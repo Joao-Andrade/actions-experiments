@@ -17,8 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       action_to_perform: ${{ steps.choosing_action.outputs.ACTION_TO_PERFORM }}
-      rollback_broken_version: ${{ steps.choosing_action.outputs.BROKEN_VERSION || "" }}
-      rollback_previous_version: ${{ steps.choosing_action.outputs.PREVIOUS_VERSION || "" }}
+      rollback_broken_version: ${{ steps.choosing_action.outputs.BROKEN_VERSION || '' }}
+      rollback_previous_version: ${{ steps.choosing_action.outputs.PREVIOUS_VERSION || '' }}
     steps:
     - name: Choosing action
       id: choosing_action
