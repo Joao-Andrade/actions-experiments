@@ -17,8 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       action_to_perform: ${{ steps.choosing_action.outputs.ACTION_TO_PERFORM }}
-      rollback_broken_version: ${{ steps.choosing_action.outputs.BROKEN_VERSION }}
-      rollback_previous_version: ${{ steps.choosing_action.outputs.PREVIOUS_VERSION }}
+      rollback_broken_version: ${{ steps.choosing_action.outputs.BROKEN_VERSION || "" }}
+      rollback_previous_version: ${{ steps.choosing_action.outputs.PREVIOUS_VERSION || "" }}
     steps:
     - name: Choosing action
       id: choosing_action
@@ -27,7 +27,7 @@ jobs:
         is_rollback=$(echo "$message" | { grep "Merge pull request #" || echo ""; } | { grep "/rollback-branch" || echo ""; })
         if [ -z "$is_rollback" ]; then
           echo "Normal execution."
-          echo "ACTION_TO_PERFORM='normal'" >>  $GITHUB_OUTPUT
+          echo "ACTION_TO_PERFORM=normal" >>  $GITHUB_OUTPUT
           exit 0
         fi
         echo "Rolling back."
@@ -47,6 +47,7 @@ jobs:
     - name: a
       run: |
         echo "${{ needs.choosing_action.outputs.action_to_perform }}"
+        echo "${{ needs.choosing_action.outputs }}"
 
   rollback-please:
     runs-on: ubuntu-latest
