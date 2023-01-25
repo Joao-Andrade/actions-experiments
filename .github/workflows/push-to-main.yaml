@@ -106,7 +106,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
     - name: Checkout to previous version
-      run: echo "Previous version -> ${{ needs.get-latest-stable-release.outputs.prev_release }}"
+      run: echo "Previous version -> ${{ needs.get-latest-stable-release-version.outputs.prev_release }}"
     - name: Change branch to rollback-branch
       run: git checkout -b rollback-branch
     - name: Change version on version files
@@ -114,7 +114,7 @@ jobs:
         case ${{ env.RELEASE_TYPE }} in
           simple)
             # remove letter v from the version and change it on the version file.
-            echo "${{ needs.get-latest-stable-release.outputs.prev_release }}" | sed 's/^.//' > version.txt
+            echo "${{ needs.get-latest-stable-release-version.outputs.prev_release }}" | sed 's/^.//' > version.txt
             git add version.txt
             ;;
           *)
@@ -125,15 +125,15 @@ jobs:
     - name: Update Changelog
       run: |
         current_time=`date +%Y-%m-%d`
-        sed -i "1s/.*/# Changelog\n\n### Rollback\n\n* Rollback to version ${{ needs.get-latest-stable-release.outputs.prev_release }} ($current_time)\n/" CHANGELOG.md
+        sed -i "1s/.*/# Changelog\n\n### Rollback\n\n* Rollback to version ${{ needs.get-latest-stable-release-version.outputs.prev_release }} ($current_time)\n/" CHANGELOG.md
         git add CHANGELOG.md
     - name: create pull request
       run: |
         git config --global user.name "actions-bot"
         git config user.email 'github-actions-bot@google.com'
-        git commit -m "Rollback version: from v${{ needs.release-please.outputs.version_tag }} to ${{ needs.get-latest-stable-release.outputs.prev_release }}"
-        pr_title="Rollback version from ${{ needs.release-please.outputs.version_tag }} to ${{ needs.get-latest-stable-release.outputs.prev_release }}"
-        pr_body="If current version is not working, use this pull request to revert the version deployed from ${{ needs.release-please.outputs.version_tag }} to ${{ needs.get-latest-stable-release.outputs.prev_release }}. \
+        git commit -m "Rollback version: from v${{ needs.release-please.outputs.version_tag }} to ${{ needs.get-latest-stable-release-version.outputs.prev_release }}"
+        pr_title="Rollback version from ${{ needs.release-please.outputs.version_tag }} to ${{ needs.get-latest-stable-release-version.outputs.prev_release }}"
+        pr_body="If current version is not working, use this pull request to revert the version deployed from ${{ needs.release-please.outputs.version_tag }} to ${{ needs.get-latest-stable-release-version.outputs.prev_release }}. \
             This will **not** revert changes on main branch. What it does: \n \
             - Change version files to place the previous version. \
             - Update argocd deployment so it uses the previous version again."
