@@ -27,7 +27,8 @@ jobs:
         last_line=$(echo "$message" | tail -n1)
         echo "$last_line"
         versions=$(echo "$last_line" | sed 's/.*Rollback version from //')
-        broken_version="v$(echo '$message' | tail -n1 | sed 's/.*Rollback version from //' | sed 's/ to.*//')"
+        echo "$versions"
+        broken_version="v".$(echo "$message" | tail -n1 | sed 's/.*Rollback version from //' | sed 's/ to.*//')
         echo "Broken version: $broken_version"
         prev_version="v${message##*v}"
         echo "Previous version: $prev_version"
