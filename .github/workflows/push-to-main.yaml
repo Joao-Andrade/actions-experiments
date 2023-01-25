@@ -35,7 +35,7 @@ jobs:
         echo "Broken version: $broken_version"
         prev_version="v${message##*v}"
         echo "Previous version: $prev_version"
-        echo "ACTION_TO_PERFORM='rollback'" >>  $GITHUB_OUTPUT
+        echo "ACTION_TO_PERFORM=rollback" >>  $GITHUB_OUTPUT
         echo "BROKEN_VERSION=$broken_version" >>  $GITHUB_OUTPUT
         echo "PREVIOUS_VERSION=$prev_version" >>  $GITHUB_OUTPUT
 
