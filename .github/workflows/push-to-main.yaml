@@ -13,11 +13,40 @@ env:
 #  GITHUB_TOKEN: 'a'
 
 jobs:
+  rollback-please:
+    runs-on: ubuntu-latest
+    outputs:
+      rollback_executed: ${{ steps.rollback_step.outputs.ROLLBACK_EXECUTED }}
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Rollback if conditions met
+      id: rollback_step
+      run: |
+        echo "ROLLBACK_EXECUTED=false" >>  $GITHUB_OUTPUT
+        message=$(echo "${{ github.event.head_commit.message }}")
+        is_rollback=$(echo "$message" | { grep "Merge pull request #" || echo ""; } | { grep "rollback-branch" || echo ""; })
+        if [ -z "$is_rollback" ]; then
+          echo "Not rollback. Exiting."
+          exit 0
+        fi
+        echo "Commit message: $message"
+        broken_version="v"$(echo "$message" | tail -n1 | sed 's/.*Rollback version from //' | sed 's/ to.*//')
+        echo "Broken version: $broken_version"
+        prev_version="v${message##*v}"
+        echo "Previous version: $prev_version"
+        gh release edit $prev_version --latest
+        gh release edit $broken_version --title ${broken_version}-broken
+        echo "ROLLBACK_EXECUTED=true" >>  $GITHUB_OUTPUT
+
   get-latest-stable-release:
     name: Get last stable version
     runs-on: ubuntu-latest
+    needs:
+      - rollback-please
     outputs:
       prev_release: ${{ steps.prev_release.outputs.PREV_RELEASE }}
+    if: ${{ needs.rollback-please.outputs.rollback_executed == 'false' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
