@@ -17,27 +17,13 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       action_to_perform: ${{ steps.choosing_action.outputs.ACTION_TO_PERFORM }}
-      rollback_broken_version: ${{ steps.choosing_action.outputs.BROKEN_VERSION || '' }}
-      rollback_previous_version: ${{ steps.choosing_action.outputs.PREVIOUS_VERSION || '' }}
+      #rollback_broken_version: ${{ steps.choosing_action.outputs.BROKEN_VERSION || '' }}
+      #rollback_previous_version: ${{ steps.choosing_action.outputs.PREVIOUS_VERSION || '' }}
     steps:
     - name: Choosing action
       id: choosing_action
       run: |
-        message=$(echo "${{ github.event.head_commit.message }}")
-        is_rollback=$(echo "$message" | { grep "Merge pull request #" || echo ""; } | { grep "/rollback-branch" || echo ""; })
-        if [ -z "$is_rollback" ]; then
-          echo "Normal execution."
-          echo "ACTION_TO_PERFORM=normal" >>  $GITHUB_OUTPUT
-          exit 0
-        fi
-        echo "Rolling back."
-        broken_version="v"$(echo "$message" | tail -n1 | sed 's/.*Rollback version from //' | sed 's/ to.*//')
-        echo "Broken version: $broken_version"
-        prev_version="v${message##*v}"
-        echo "Previous version: $prev_version"
         echo "ACTION_TO_PERFORM='rollback'" >>  $GITHUB_OUTPUT
-        echo "BROKEN_VERSION=$broken_version" >>  $GITHUB_OUTPUT
-        echo "PREVIOUS_VERSION=$prev_version" >>  $GITHUB_OUTPUT
 
   a:
     runs-on: ubuntu-latest
