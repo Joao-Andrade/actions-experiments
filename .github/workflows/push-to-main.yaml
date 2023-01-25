@@ -17,8 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       action_to_perform: ${{ steps.choosing_action.outputs.ACTION_TO_PERFORM }}
-      rollback_broken_version: ${{ steps.choosing_action.outputs.BROKEN_VERSION }}
-      rollback_previous_version: ${{ steps.choosing_action.outputs.PREVIOUS_VERSION }}
+      rollback_broken_version: ${{ steps.choosing_action.outputs.BROKEN_VERSION || '' }}
+      rollback_previous_version: ${{ steps.choosing_action.outputs.PREVIOUS_VERSION || '' }}
     steps:
     - name: Choosing action
       id: choosing_action
@@ -43,16 +43,16 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - choose-action
-    if: ${{ needs.choosing_action.outputs.action_to_perform == 'rollback' }}
+    if: ${{ needs.choose-action.outputs.action_to_perform == 'rollback' }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
     - name: Rollback versions
       id: rollback_step
       run: |
-        broken_version="${{ needs.choosing_action.outputs.rollback_broken_version }}"
+        broken_version="${{ needs.choose-action.outputs.rollback_broken_version }}"
         echo "Broken version: $broken_version"
-        prev_version="{{ needs.choosing_action.outputs.rollback_previous_version }}"
+        prev_version="${{ needs.choose-action.outputs.rollback_previous_version }}"
         echo "Previous version: $prev_version"
         gh release edit $prev_version --latest
         gh release edit $broken_version --title ${broken_version}-broken
@@ -64,7 +64,7 @@ jobs:
       - choose-action
     outputs:
       prev_release: ${{ steps.prev_release.outputs.PREV_RELEASE }}
-    if: ${{ needs.choosing_action.outputs.action_to_perform == 'normal' }}
+    if: ${{ needs.choose-action.outputs.action_to_perform == 'normal' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
