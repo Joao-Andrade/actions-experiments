@@ -1,6 +1,9 @@
 name: Rollback versions
 on:
- - push
+ # - push
+ push:
+    branches:
+      - main
 
 env:
   #APP_NAME: 'aaaa'
