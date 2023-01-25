@@ -10,6 +10,44 @@
 * Rollback to version v1.14.0 (2023-01-24)
 
 
+## [1.17.0](https://github.com/Joao-Andrade/actions-experiments/compare/v1.16.0...v1.17.0) (2023-01-25)
+
+
+### Features
+
+* a feat. ([c8fe3a9](https://github.com/Joao-Andrade/actions-experiments/commit/c8fe3a9406ca777b551eaa09271060aa4a5c8f61))
+* a feat. ([08e851c](https://github.com/Joao-Andrade/actions-experiments/commit/08e851ca90a3382d81bedb1079dfb22a54361ca2))
+* a feat. ([9e28c37](https://github.com/Joao-Andrade/actions-experiments/commit/9e28c37fa3cefddd749a02acb9d30ce0693d78d7))
+* a feat. ([d8bb619](https://github.com/Joao-Andrade/actions-experiments/commit/d8bb619ffa56e6a06c73b83122132a589e1ca33e))
+* a feat. ([e6d369c](https://github.com/Joao-Andrade/actions-experiments/commit/e6d369c413a5960973573f536f3dd6c45bdf10bd))
+* a feat. ([fc434b5](https://github.com/Joao-Andrade/actions-experiments/commit/fc434b5a90c8d73082517712cb610938f928756a))
+* a feat. ([378638b](https://github.com/Joao-Andrade/actions-experiments/commit/378638b8b07dc328d0dcbbef1a4a25c01b2b8189))
+* a feat. ([8aff01e](https://github.com/Joao-Andrade/actions-experiments/commit/8aff01e2fcadccdde2544d84a407fd92482da8bd))
+* a feat. ([3209ee3](https://github.com/Joao-Andrade/actions-experiments/commit/3209ee397677730dc3bb0b2b9d9ff8f84678fb78))
+* a feat. ([ffa5249](https://github.com/Joao-Andrade/actions-experiments/commit/ffa52491eacec030ec0a4820ef7d049cb79ccee7))
+* a feat. ([3d33006](https://github.com/Joao-Andrade/actions-experiments/commit/3d33006a68be812f9a0cadc6d7571095cb21e2ec))
+* a feat. ([163128e](https://github.com/Joao-Andrade/actions-experiments/commit/163128e69987c37a2e6ce6049dba9ee128563108))
+* a feat. ([5f9f45b](https://github.com/Joao-Andrade/actions-experiments/commit/5f9f45bcfc8ace5e4e76d61305c5a335223bbf1d))
+* a feat. ([b3ea172](https://github.com/Joao-Andrade/actions-experiments/commit/b3ea172e85e8180483425e39ccb249c19f09e7a0))
+* a feat. ([9b5d7a9](https://github.com/Joao-Andrade/actions-experiments/commit/9b5d7a9960ab50a8db0ad42aae722828e306e3cb))
+* a feat. ([76fbee9](https://github.com/Joao-Andrade/actions-experiments/commit/76fbee97afec42cbd0a45cc4cd907886134739f6))
+* a feat. ([641bf93](https://github.com/Joao-Andrade/actions-experiments/commit/641bf936a1ee18780fa1774bbf30575aa7368a12))
+* a feat. ([522b218](https://github.com/Joao-Andrade/actions-experiments/commit/522b218bd1e9b97fa50630fc98e5d05543b4a636))
+* a feat. ([977b276](https://github.com/Joao-Andrade/actions-experiments/commit/977b2760c85799035863f3feb469808a3bc58d64))
+* a feat. ([7a8a6dc](https://github.com/Joao-Andrade/actions-experiments/commit/7a8a6dcd76623c29eb65733a31bbb6ecc6b6a350))
+* a feat. ([0d34c64](https://github.com/Joao-Andrade/actions-experiments/commit/0d34c64e499731b6f3cbb432f6336ee591bbbb2e))
+* a feat. ([95298a5](https://github.com/Joao-Andrade/actions-experiments/commit/95298a583f018d61ba6c14ce754f84de82b473c2))
+* a feat. ([f44208f](https://github.com/Joao-Andrade/actions-experiments/commit/f44208fc9bfca66e3b84e3fcf8a995e85eb84c0b))
+* a feat. ([b5ae4a1](https://github.com/Joao-Andrade/actions-experiments/commit/b5ae4a1cf848a6e7581b740ded0bf206712bcf5a))
+* a feat. ([6119b00](https://github.com/Joao-Andrade/actions-experiments/commit/6119b001b2eda48281a4eb4edffd2e791c19600d))
+* a feat. ([1bebb5b](https://github.com/Joao-Andrade/actions-experiments/commit/1bebb5bd5741783e87eb00861c95e7e2b36a06df))
+* a feat. ([79a22de](https://github.com/Joao-Andrade/actions-experiments/commit/79a22de0b83e185263aee3188cf5c17cea2fb90d))
+* a feat. ([6ca76c6](https://github.com/Joao-Andrade/actions-experiments/commit/6ca76c65e4d9a822eb85efc2cc83dfe103851aa6))
+* a feat. ([ec451d3](https://github.com/Joao-Andrade/actions-experiments/commit/ec451d328b4e2d59e5b0019d6040d51da55c6b70))
+* a feat. ([b49a3e5](https://github.com/Joao-Andrade/actions-experiments/commit/b49a3e59dc42d0d358bad1acb99f8a01ceaa95e4))
+* a feat. ([a5d12cb](https://github.com/Joao-Andrade/actions-experiments/commit/a5d12cbff9894cb4b7c7ac73c2c3a933a5252fa7))
+* a feat. ([425be0b](https://github.com/Joao-Andrade/actions-experiments/commit/425be0be71de06833ce2d23092c1d2b1ed75fe6a))
+
 ## [1.16.0](https://github.com/Joao-Andrade/actions-experiments/compare/v1.15.0...v1.16.0) (2023-01-24)
 
 
