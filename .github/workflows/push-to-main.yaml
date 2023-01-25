@@ -27,7 +27,7 @@ jobs:
         is_rollback=$(echo "$message" | { grep "Merge pull request #" || echo ""; } | { grep "/rollback-branch" || echo ""; })
         if [ -z "$is_rollback" ]; then
           echo "Normal execution."
-          echo "ACTION_TO_PERFORM=normal" >>  $GITHUB_OUTPUT
+          echo "ACTION_TO_PERFORM='normal'" >>  $GITHUB_OUTPUT
           exit 0
         fi
         echo "Rolling back."
@@ -35,7 +35,7 @@ jobs:
         echo "Broken version: $broken_version"
         prev_version="v${message##*v}"
         echo "Previous version: $prev_version"
-        echo "ACTION_TO_PERFORM=rollback" >>  $GITHUB_OUTPUT
+        echo "ACTION_TO_PERFORM='rollback'" >>  $GITHUB_OUTPUT
         echo "BROKEN_VERSION=$broken_version" >>  $GITHUB_OUTPUT
         echo "PREVIOUS_VERSION=$prev_version" >>  $GITHUB_OUTPUT
 
@@ -46,7 +46,7 @@ jobs:
     steps:
     - name: a
       run: |
-        echo "${{ needs.choosing_action.outputs.action_to_perform }}""
+        echo "${{ needs.choosing_action.outputs.action_to_perform }}"
 
   rollback-please:
     runs-on: ubuntu-latest
