@@ -50,9 +50,9 @@ jobs:
     - name: Rollback versions
       id: rollback_step
       run: |
-        broken_version="${{ needs.choosing_action.outputs.rollback_broken_version }}"
+        broken_version="${{ needs.choose-action.outputs.rollback_broken_version }}"
         echo "Broken version: $broken_version"
-        prev_version="{{ needs.choosing_action.outputs.rollback_previous_version }}"
+        prev_version="{{ needs.choose-action.outputs.rollback_previous_version }}"
         echo "Previous version: $prev_version"
         #gh release edit $prev_version --latest
         #gh release edit $broken_version --title ${broken_version}-broken
