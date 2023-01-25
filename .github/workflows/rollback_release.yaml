@@ -23,7 +23,7 @@ jobs:
       run: |
         #message=$(echo "${{ github.event.head_commit.message }}" | grep "A")
         message="AAA"
-        grep "A" <<< "${message}"
+        grep "a" <<< "${message}"
         #if [ $? -ne 0 ]; then
         #  echo "Not rollback. Exiting."
         #  exit 0
