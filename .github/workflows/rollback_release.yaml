@@ -27,4 +27,3 @@ jobs:
           exit 0
         fi
         echo "Rollback."
-
