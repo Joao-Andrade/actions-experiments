@@ -26,5 +26,5 @@ jobs:
         #  echo "Not rollback. Exiting."
         #  exit 0
         #fi
-        echo "Rollback."
+        #echo "Rollback."
 
