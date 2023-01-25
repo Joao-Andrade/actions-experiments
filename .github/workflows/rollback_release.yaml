@@ -30,6 +30,5 @@ jobs:
         echo "Previous version: $prev_version"
         #gh release edit $prev_version --latest
         #gh release edit $broken_version --title ${broken_version}-broken
-
 # Merge pull request #59 from Joao-Andrade/rollback-branch
 # Rollback version from 1.19.0 to v1.18.0
