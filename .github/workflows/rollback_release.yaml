@@ -20,4 +20,6 @@ jobs:
           echo "Not rollback. Exiting."
           exit 0
         fi
-        echo "Rollback."
+        echo "Rollingback to version vx.y.z."
+        gh release edit v1.7.0 --latest
+
