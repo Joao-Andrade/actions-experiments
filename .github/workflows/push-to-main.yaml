@@ -64,7 +64,7 @@ jobs:
       - choose-action
     outputs:
       prev_release: ${{ steps.prev_release.outputs.PREV_RELEASE }}
-    if: ${{ needs.choose-action.outputs.action_to_perform == 'normals' }}
+    if: ${{ needs.choose-action.outputs.action_to_perform == 'normal' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
