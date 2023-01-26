@@ -11,7 +11,4 @@ env:
 
 jobs:
   b:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - uses: ./.github/workflows/a.yaml
+    uses: ./.github/workflows/a.yaml
