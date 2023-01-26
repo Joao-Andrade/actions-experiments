@@ -1,0 +1,17 @@
+name: Push to main
+on:
+  - push
+
+env:
+  GH_TOKEN: ${{ github.token }}
+  RELEASE_TYPE: simple
+#  APP_NAME: 'aaaa'
+#  DOCKER_REGISTRY: 'bbbb'
+#  GITHUB_TOKEN: 'a'
+
+jobs:
+  b:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: ./.github/workflows/a.yaml
