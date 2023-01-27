@@ -13,12 +13,7 @@ jobs:
   c:
     runs-on: ubuntu-latest
     outputs:
-      cc: ${{ env.RELEASE_TYPE }} # ${{ steps.c.outputs.c }}
-    steps:
-      - name: c
-        id: c
-        run: |
-          echo "C=C." # >> $GITHUB_OUTPUT
+      cc: ${{ env.RELEASE_TYPE }}
   b:
     uses: ./.github/workflows/a.yaml
     needs:
