@@ -12,3 +12,5 @@ env:
 jobs:
   b:
     uses: ./.github/workflows/a.yaml
+    with:
+      v: "A."
