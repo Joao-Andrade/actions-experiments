@@ -13,4 +13,4 @@ jobs:
   b:
     uses: ./.github/workflows/a.yaml
     with:
-      v: "A."
+      v: ${{ env.RELEASE_TYPE }}
