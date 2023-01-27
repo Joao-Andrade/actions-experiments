@@ -13,12 +13,12 @@ jobs:
   c:
     runs-on: ubuntu-latest
     outputs:
-      cc: ${{ steps.c.outputs.c }}
+      cc: ${{ env.ARGOCD_REPOSITORY }} # ${{ steps.c.outputs.c }}
     steps:
       - name: c
         id: c
         run: |
-          echo "C=C." >> $GITHUB_OUTPUT
+          echo "C=C." # >> $GITHUB_OUTPUT
   b:
     uses: ./.github/workflows/a.yaml
     needs:
