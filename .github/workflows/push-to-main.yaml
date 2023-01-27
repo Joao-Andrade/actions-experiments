@@ -133,9 +133,9 @@ jobs:
         git config user.email 'github-actions-bot@google.com'
         git commit -m "Rollback version: from v${{ needs.release-please.outputs.version_tag }} to ${{ needs.get-latest-stable-release-version.outputs.prev_release }}"
         pr_title="Rollback version from ${{ needs.release-please.outputs.version_tag }} to ${{ needs.get-latest-stable-release-version.outputs.prev_release }}"
-        pr_body="If current version is not working, use this pull request to revert the version deployed from ${{ needs.release-please.outputs.version_tag }} to ${{ needs.get-latest-stable-release-version.outputs.prev_release }}. \
-            This will **not** revert changes on main branch. What it does: \n \
-            - Change version files to place the previous version. \
+        pr_body="If current version is not working, use this pull request to revert the version deployed from ${{ needs.release-please.outputs.version_tag }} to ${{ needs.get-latest-stable-release-version.outputs.prev_release }}.
+            This will **not** revert changes on main branch. What it does:
+            - Change version files to place the previous version.
             - Update argocd deployment so it uses the previous version again."
         # check if branch already exists
         branch_exists=$(git branch | grep -w rollback-branch)

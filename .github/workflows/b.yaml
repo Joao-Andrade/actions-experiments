@@ -1,6 +1,8 @@
 name: Push to main
 on:
-  - push
+  push:
+    branches:
+      - main
 
 env:
   GH_TOKEN: ${{ github.token }}
@@ -10,13 +12,13 @@ env:
 #  GITHUB_TOKEN: 'a'
 
 jobs:
-  c:
+  d:
     runs-on: ubuntu-latest
     outputs:
       cc: ${{ env.RELEASE_TYPE }}
   b:
     uses: ./.github/workflows/a.yaml
     needs:
-      - c
+      - d
     with:
-      v: ${{ needs.c.outputs.cc }}
+      v: ${{ needs.d.outputs.cc }}
