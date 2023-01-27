@@ -13,4 +13,4 @@ jobs:
   b:
     uses: ./.github/workflows/a.yaml
     with:
-      v: "$RELEASE_TYPE"
+      v: $RELEASE_TYPE
