@@ -13,7 +13,7 @@ jobs:
   c:
     runs-on: ubuntu-latest
     outputs:
-      cc: ${{ env.ARGOCD_REPOSITORY }} # ${{ steps.c.outputs.c }}
+      cc: ${{ env.RELEASE_TYPE }} # ${{ steps.c.outputs.c }}
     steps:
       - name: c
         id: c
