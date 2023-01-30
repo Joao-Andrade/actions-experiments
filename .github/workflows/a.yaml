@@ -42,7 +42,7 @@ jobs:
         echo "${{ inputs.app_name }}"
         echo "${{ inputs.working_directory }}"
         echo "${{ inputs.is_rollback }}"
-      env:
+      #env:
         #working_directory: ${{ inputs.WORKING_DIRECTORY }}
         #argocd_repository: ${{ inputs.argocd_repository }}
         #argocd_repository_access_token: ${{ secrets.ARGOCD_REPOSITORY_ACCESS_TOKEN }}
