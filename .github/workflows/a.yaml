@@ -25,9 +25,9 @@ on:
         required: false
         type: boolean
         default: false
-    secrets:
-      ARGOCD_REPOSITORY_ACCESS_TOKEN:
-        required: true
+    #secrets:
+    #  ARGOCD_REPOSITORY_ACCESS_TOKEN:
+    #    required: true
 
 jobs:
   a:
@@ -38,4 +38,4 @@ jobs:
       env:
         working_directory: ${{ inputs.WORKING_DIRECTORY }}
         argocd_repository: ${{ inputs.argocd_repository }}
-        argocd_repository_access_token: ${{ secrets.ARGOCD_REPOSITORY_ACCESS_TOKEN }}
+        #argocd_repository_access_token: ${{ secrets.ARGOCD_REPOSITORY_ACCESS_TOKEN }}
