@@ -1,24 +1,37 @@
-name: Push to main
+name: b
+
 on:
-  push:
-    branches:
-      - main
+  - push
+  #push:
+  #  branches:
+  #    - main
 
 env:
+  APP_NAME: 'toy-service'
+  DOCKER_REGISTRY: 'innoplatform.azurecr.io'
+  ARGOCD_REPOSITORY: 'git.dg-i.net/azde/inno/inno-fpp/orchestration.git'
+  RELEASE_TYPE: 'node'
   GH_TOKEN: ${{ github.token }}
-  RELEASE_TYPE: simple
-#  APP_NAME: 'aaaa'
-#  DOCKER_REGISTRY: 'bbbb'
-#  GITHUB_TOKEN: 'a'
 
 jobs:
-  d:
+  bb:
+    name: job_bb
     runs-on: ubuntu-latest
     outputs:
-      cc: ${{ env.RELEASE_TYPE }}
+      argocd_repository: "${{ env.ARGOCD_REPOSITORY }}"
+    steps:
+      - name: step_b
+        id: step_b
+        run: echo "step_b."
+          
   b:
+    name: job_b
     uses: ./.github/workflows/a.yaml
-    needs:
-      - d
     with:
-      v: ${{ needs.d.outputs.cc }}
+      # why needs.choose-action instead of going directly to env variable?
+      # Because github actions doesn't like to pass env variables on "with".
+      argocd_repository: ${{ needs.bb.outputs.ARGOCD_REPOSITORY }}
+      file_path: './orchestration/production/toy-service.yaml'
+      yaml_key_path: '["spec", "source", "targetRevision"]'
+    needs:
+      - bb

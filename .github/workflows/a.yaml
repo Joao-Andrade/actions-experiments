@@ -1,14 +1,41 @@
-name: A.
+name: Updates
 on:
   workflow_call:
     inputs:
-      v:
+      argocd_repository:
         required: true
         type: string
+      new_version:
+        required: true
+        type: string
+      file_path:
+        required: true
+        type: string
+      yaml_key_path:
+        required: true
+        type: string
+      app_name:
+        required: true
+        type: string
+      WORKING_DIRECTORY:
+        required: false
+        type: string
+        default: "./orchestration"
+      is_rollback:
+        required: false
+        type: boolean
+        default: false
+    secrets:
+      ARGOCD_REPOSITORY_ACCESS_TOKEN:
+        required: true
+
 jobs:
   a:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - run: echo "${{ inputs.v }}"
-      - run: env
+    - name: Clone ArgoCD orchestration repository_name
+      run: echo "${{ inputs.WORKING_DIRECTORY }}" # git clone https://oauth2:$ARGOCD_REPOSITORY_ACCESS_TOKEN@$ARGOCD_REPOSITORY
+      env:
+        working_directory: ${{ inputs.WORKING_DIRECTORY }}
+        argocd_repository: ${{ inputs.argocd_repository }}
+        argocd_repository_access_token: ${{ secrets.ARGOCD_REPOSITORY_ACCESS_TOKEN }}
