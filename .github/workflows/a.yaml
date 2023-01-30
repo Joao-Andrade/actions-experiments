@@ -17,7 +17,7 @@ on:
       app_name:
         required: true
         type: string
-      WORKING_DIRECTORY:
+      working_directory:
         required: false
         type: string
         default: "./orchestration"
@@ -34,8 +34,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Clone ArgoCD orchestration repository_name
-      run: echo "${{ inputs.WORKING_DIRECTORY }}" # git clone https://oauth2:$ARGOCD_REPOSITORY_ACCESS_TOKEN@$ARGOCD_REPOSITORY
+      run: |
+        echo "${{ inputs.argocd_repository }}"
+        echo "${{ inputs.new_version }}"
+        echo "${{ inputs.file_path }}"
+        echo "${{ inputs.yaml_key_path }}"
+        echo "${{ inputs.app_name }}"
+        echo "${{ inputs.working_directory }}"
+        echo "${{ inputs.is_rollback }}"
       env:
-        working_directory: ${{ inputs.WORKING_DIRECTORY }}
-        argocd_repository: ${{ inputs.argocd_repository }}
+        #working_directory: ${{ inputs.WORKING_DIRECTORY }}
+        #argocd_repository: ${{ inputs.argocd_repository }}
         #argocd_repository_access_token: ${{ secrets.ARGOCD_REPOSITORY_ACCESS_TOKEN }}
