@@ -31,7 +31,9 @@ jobs:
       # why needs.choose-action instead of going directly to env variable?
       # Because github actions doesn't like to pass env variables on "with".
       argocd_repository: ${{ needs.bb.outputs.ARGOCD_REPOSITORY }}
+      new_version: '1.0.0'
       file_path: './orchestration/production/toy-service.yaml'
       yaml_key_path: '["spec", "source", "targetRevision"]'
+      app_name: 'App.'
     needs:
       - bb
