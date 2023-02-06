@@ -42,7 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Download artifact
-      if: ${{ inputs.artifact_name != "" }}
+      if: ${{ inputs.artifact_name != '' }}
       uses: actions/download-artifact@v3
       with:
         name: ${{ inputs.artifact_name }}
