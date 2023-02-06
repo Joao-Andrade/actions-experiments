@@ -32,7 +32,7 @@ on:
       artifact_path:
         required: false
         type: string
-        default: ""
+        default: "./"
     #secrets:
     #  ARGOCD_REPOSITORY_ACCESS_TOKEN:
     #    required: true
@@ -46,6 +46,7 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: ${{ inputs.artifact_name }}
+        working-dir: ${{ inputs.artifact_path }}
     - name: Check artifact
       run: |
         pwd
