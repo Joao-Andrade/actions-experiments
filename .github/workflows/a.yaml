@@ -46,7 +46,7 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: ${{ inputs.artifact_name }}
-        working-directory: ${{ inputs.artifact_path }}
+        path: ${{ inputs.artifact_path }}
     - name: Check artifact
       run: |
         pwd
