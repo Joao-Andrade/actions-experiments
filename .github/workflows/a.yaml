@@ -25,6 +25,14 @@ on:
         required: false
         type: boolean
         default: false
+      artifact_name:
+        required: false
+        type: string
+        default: ""
+      artifact_path:
+        required: false
+        type: string
+        default: ""
     #secrets:
     #  ARGOCD_REPOSITORY_ACCESS_TOKEN:
     #    required: true
@@ -33,7 +41,17 @@ jobs:
   a:
     runs-on: ubuntu-latest
     steps:
-    - name: Clone ArgoCD orchestration repository_name
+    - name: Download artifact
+      if: ${{ inputs.artifact_name != "" }}
+      uses: actions/download-artifact@v3
+      with:
+        name: ${{ inputs.artifact_name }}
+    - name: Check artifact
+      run: |
+        ls
+        echo "A."
+        ls ./
+    - name: Check inputs
       run: |
         echo "${{ inputs.argocd_repository }}"
         echo "${{ inputs.new_version }}"
