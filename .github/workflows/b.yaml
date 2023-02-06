@@ -27,7 +27,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: a-artifact
-          #path: ./app/dist
+          path: ./app/dist
           retention-days: 1
           
   b:
@@ -42,6 +42,6 @@ jobs:
       yaml_key_path: '["spec", "source", "targetRevision"]'
       app_name: 'App.'
       artifact_name: a-artifact
-      artifact_path: "./app/dist"
+      #artifact_path: "./app/dist"
     needs:
       - bb
