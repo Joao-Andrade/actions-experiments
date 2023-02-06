@@ -27,7 +27,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: a-artifact
-          path: ./app/dist
+          #path: ./app/dist
           retention-days: 1
           
   b:
