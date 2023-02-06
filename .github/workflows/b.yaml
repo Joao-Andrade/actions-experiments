@@ -41,7 +41,7 @@ jobs:
       file_path: './a/b'
       yaml_key_path: '["spec", "source", "targetRevision"]'
       app_name: 'App.'
-      artifact_name: a-artifact
+      #artifact_name: a-artifact
       #artifact_path: "./app/dist"
     needs:
       - bb
