@@ -91,7 +91,7 @@ jobs:
       id: release
       with:
         release-type: ${{ env.RELEASE_TYPE }}
-        skip-github-release: true
+        skip-github-release: false
         version-file: ab.txt
     - name: Checkout code
       uses: actions/checkout@v3
