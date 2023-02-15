@@ -1,0 +1,47 @@
+name: b
+
+on:
+  #- push
+  push:
+    branches:
+      - main
+
+env:
+  APP_NAME: 'app-name'
+  DOCKER_REGISTRY: 'registry.something'
+  ARGOCD_REPOSITORY: 'repo.something'
+  RELEASE_TYPE: 'node'
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  bb:
+    name: job_bb
+    runs-on: ubuntu-latest
+    outputs:
+      argocd_repository: "${{ env.ARGOCD_REPOSITORY }}"
+    steps:
+      - name: step_b
+        id: step_b
+        run: echo "step_b." && mkdir -p ./app/dist/a && touch ./app/dist/a/b.txt
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v3
+        with:
+          name: a-artifact
+          path: ./app/dist
+          retention-days: 1
+          
+  b:
+    name: job_b
+    uses: ./.github/workflows/a.yaml
+    with:
+      # why needs.choose-action instead of going directly to env variable?
+      # Because github actions doesn't like to pass env variables on "with".
+      argocd_repository: ${{ needs.bb.outputs.ARGOCD_REPOSITORY }}
+      new_version: '1.0.0'
+      file_path: './a/b'
+      yaml_key_path: '["spec", "source", "targetRevision"]'
+      app_name: 'App.'
+      #artifact_name: a-artifact
+      #artifact_path: "./app/dist"
+    needs:
+      - bb

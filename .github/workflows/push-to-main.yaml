@@ -1,9 +1,9 @@
 name: Push to main
 on:
-  #- push
-  push:
-    branches:
-      - main
+  - push
+  #push:
+  #  branches:
+  #    - main
 
 env:
   GH_TOKEN: ${{ github.token }}
@@ -13,76 +13,76 @@ env:
 #  GITHUB_TOKEN: 'a'
 
 jobs:
-  choose-action:
-    runs-on: ubuntu-latest
-    outputs:
-      action_to_perform: ${{ steps.choosing_action.outputs.ACTION_TO_PERFORM }}
-      rollback_broken_version: ${{ steps.choosing_action.outputs.BROKEN_VERSION || '' }}
-      rollback_previous_version: ${{ steps.choosing_action.outputs.PREVIOUS_VERSION || '' }}
-    steps:
-    - name: Choosing action
-      id: choosing_action
-      run: |
-        message=$(echo "${{ github.event.head_commit.message }}")
-        is_rollback=$(echo "$message" | { grep "Merge pull request #" || echo ""; } | { grep "/rollback-branch" || echo ""; })
-        if [ -z "$is_rollback" ]; then
-          echo "Normal execution."
-          echo "ACTION_TO_PERFORM=normal" >>  $GITHUB_OUTPUT
-          exit 0
-        fi
-        echo "Rolling back."
-        broken_version="v"$(echo "$message" | tail -n1 | sed 's/.*Rollback version from //' | sed 's/ to.*//')
-        echo "Broken version: $broken_version"
-        prev_version="v${message##*v}"
-        echo "Previous version: $prev_version"
-        echo "ACTION_TO_PERFORM=rollback" >>  $GITHUB_OUTPUT
-        echo "BROKEN_VERSION=$broken_version" >>  $GITHUB_OUTPUT
-        echo "PREVIOUS_VERSION=$prev_version" >>  $GITHUB_OUTPUT
+  # choose-action:
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     action_to_perform: ${{ steps.choosing_action.outputs.ACTION_TO_PERFORM }}
+  #     rollback_broken_version: ${{ steps.choosing_action.outputs.BROKEN_VERSION || '' }}
+  #     rollback_previous_version: ${{ steps.choosing_action.outputs.PREVIOUS_VERSION || '' }}
+  #   steps:
+  #   - name: Choosing action
+  #     id: choosing_action
+  #     run: |
+  #       message=$(echo "${{ github.event.head_commit.message }}")
+  #       is_rollback=$(echo "$message" | { grep "Merge pull request #" || echo ""; } | { grep "/rollback-branch" || echo ""; })
+  #       if [ -z "$is_rollback" ]; then
+  #         echo "Normal execution."
+  #         echo "ACTION_TO_PERFORM=normal" >>  $GITHUB_OUTPUT
+  #         exit 0
+  #       fi
+  #       echo "Rolling back."
+  #       broken_version="v"$(echo "$message" | tail -n1 | sed 's/.*Rollback version from //' | sed 's/ to.*//')
+  #       echo "Broken version: $broken_version"
+  #       prev_version="v${message##*v}"
+  #       echo "Previous version: $prev_version"
+  #       echo "ACTION_TO_PERFORM=rollback" >>  $GITHUB_OUTPUT
+  #       echo "BROKEN_VERSION=$broken_version" >>  $GITHUB_OUTPUT
+  #       echo "PREVIOUS_VERSION=$prev_version" >>  $GITHUB_OUTPUT
 
-  rollback-please:
-    runs-on: ubuntu-latest
-    needs:
-      - choose-action
-    if: ${{ needs.choose-action.outputs.action_to_perform == 'rollback' }}
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-    - name: Rollback versions
-      id: rollback_step
-      run: |
-        broken_version="${{ needs.choose-action.outputs.rollback_broken_version }}"
-        echo "Broken version: $broken_version"
-        prev_version="${{ needs.choose-action.outputs.rollback_previous_version }}"
-        echo "Previous version: $prev_version"
-        gh release edit $prev_version --latest
-        gh release edit $broken_version --title ${broken_version}-broken
+  # rollback-please:
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - choose-action
+  #   if: ${{ needs.choose-action.outputs.action_to_perform == 'rollback' }}
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v3
+  #   - name: Rollback versions
+  #     id: rollback_step
+  #     run: |
+  #       broken_version="${{ needs.choose-action.outputs.rollback_broken_version }}"
+  #       echo "Broken version: $broken_version"
+  #       prev_version="${{ needs.choose-action.outputs.rollback_previous_version }}"
+  #       echo "Previous version: $prev_version"
+  #       gh release edit $prev_version --latest
+  #       gh release edit $broken_version --title ${broken_version}-broken
 
-  get-latest-stable-release-version:
-    name: Get last stable version
-    runs-on: ubuntu-latest
-    needs:
-      - choose-action
-    outputs:
-      prev_release: ${{ steps.prev_release.outputs.PREV_RELEASE }}
-    if: ${{ needs.choose-action.outputs.action_to_perform == 'normal' }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Get previous release
-        id: prev_release
-        run: |
-          # print to console then to the output variable.
-          echo "PREV_RELEASE=$(gh release list | awk '$2 == "Latest"' | awk '{print $1}')"
-          echo "PREV_RELEASE=$(gh release list | awk '$2 == "Latest"' | awk '{print $1}')" >>  $GITHUB_OUTPUT
+  # get-latest-stable-release-version:
+  #   name: Get last stable version
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - choose-action
+  #   outputs:
+  #     prev_release: ${{ steps.prev_release.outputs.PREV_RELEASE }}
+  #   if: ${{ needs.choose-action.outputs.action_to_perform == 'normal' }}
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
+  #     - name: Get previous release
+  #       id: prev_release
+  #       run: |
+  #         # print to console then to the output variable.
+  #         echo "PREV_RELEASE=$(gh release list | awk '$2 == "Latest"' | awk '{print $1}')"
+  #         echo "PREV_RELEASE=$(gh release list | awk '$2 == "Latest"' | awk '{print $1}')" >>  $GITHUB_OUTPUT
 
 
   release-please:
     runs-on: ubuntu-latest
-    needs:
-      - get-latest-stable-release-version
-    permissions:
-      contents: write
-      pull-requests: write
+    #needs:
+    #  - get-latest-stable-release-version
+    # permissions:
+    #   contents: write
+    #   pull-requests: write
     outputs:
       release_created: ${{ steps.release.outputs.release_created || false }}
       version_tag: "${{ steps.release.outputs.release_created && format('{0}.{1}.{2}',steps.release.outputs.major,steps.release.outputs.minor,steps.release.outputs.patch) || steps.package-json-version.outputs.value }}"
@@ -91,67 +91,69 @@ jobs:
       id: release
       with:
         release-type: ${{ env.RELEASE_TYPE }}
+        skip-github-release: false
+        version-file: ab.txt
     - name: Checkout code
       uses: actions/checkout@v3
 
 
-  rollback-create-pull-request:
-    name: Create rollback pull request
-    runs-on: ubuntu-latest
-    needs:
-      - get-latest-stable-release-version
-      - release-please
-    if: ${{ needs.release-please.outputs.release_created == 'true' }}
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-    - name: Checkout to previous version
-      run: echo "Previous version -> ${{ needs.get-latest-stable-release-version.outputs.prev_release }}"
-    - name: Change branch to rollback-branch
-      run: git checkout -b rollback-branch
-    - name: Change version on version files
-      run: |
-        case ${{ env.RELEASE_TYPE }} in
-          simple)
-            # remove letter v from the version and change it on the version file.
-            echo "${{ needs.get-latest-stable-release-version.outputs.prev_release }}" | sed 's/^.//' > version.txt
-            git add version.txt
-            ;;
-          *)
-            echo "release type '${{ env.RELEASE_TYPE }}' not valid."
-            exit 1
-            ;;
-        esac
-    - name: Update Changelog
-      run: |
-        current_time=`date +%Y-%m-%d`
-        sed -i "1s/.*/# Changelog\n\n### Rollback\n\n* Rollback to version ${{ needs.get-latest-stable-release-version.outputs.prev_release }} ($current_time)\n/" CHANGELOG.md
-        git add CHANGELOG.md
-    - name: create pull request
-      run: |
-        git config --global user.name "actions-bot"
-        git config user.email 'github-actions-bot@google.com'
-        git commit -m "Rollback version: from v${{ needs.release-please.outputs.version_tag }} to ${{ needs.get-latest-stable-release-version.outputs.prev_release }}"
-        pr_title="Rollback version from ${{ needs.release-please.outputs.version_tag }} to ${{ needs.get-latest-stable-release-version.outputs.prev_release }}"
-        pr_body="If current version is not working, use this pull request to revert the version deployed from ${{ needs.release-please.outputs.version_tag }} to ${{ needs.get-latest-stable-release-version.outputs.prev_release }}. \
-            This will **not** revert changes on main branch. What it does: \n \
-            - Change version files to place the previous version. \
-            - Update argocd deployment so it uses the previous version again."
-        # check if branch already exists
-        branch_exists=$(git branch | grep -w rollback-branch)
-        if [ -z $branch_exists ];then
-          git push --set-upstream origin rollback-branch
-        else
-          # force to override the branch with the new stuff
-          git push --set-upstream origin rollback-branch --force
-        fi
-        pull_request_number=$(gh pr list -s open -H rollback-branch --json number --jq '.[].number')
-        # if no pull request exists. Create one.
-        if [ -z $pull_request_number ]; then
-          gh pr create --title "$pr_title" --body "$pr_body"
-        # Pull request exists. Update existing one.
-        else
-          gh pr edit $pull_request_number --title "$pr_title" --body "$pr_body"
-        fi
+  # rollback-create-pull-request:
+  #   name: Create rollback pull request
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - get-latest-stable-release-version
+  #     - release-please
+  #   if: ${{ needs.release-please.outputs.release_created == 'true' }}
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v3
+  #   - name: Checkout to previous version
+  #     run: echo "Previous version -> ${{ needs.get-latest-stable-release-version.outputs.prev_release }}"
+  #   - name: Change branch to rollback-branch
+  #     run: git checkout -b rollback-branch
+  #   - name: Change version on version files
+  #     run: |
+  #       case ${{ env.RELEASE_TYPE }} in
+  #         simple)
+  #           # remove letter v from the version and change it on the version file.
+  #           echo "${{ needs.get-latest-stable-release-version.outputs.prev_release }}" | sed 's/^.//' > version.txt
+  #           git add version.txt
+  #           ;;
+  #         *)
+  #           echo "release type '${{ env.RELEASE_TYPE }}' not valid."
+  #           exit 1
+  #           ;;
+  #       esac
+  #   - name: Update Changelog
+  #     run: |
+  #       current_time=`date +%Y-%m-%d`
+  #       sed -i "1s/.*/# Changelog\n\n### Rollback\n\n* Rollback to version ${{ needs.get-latest-stable-release-version.outputs.prev_release }} ($current_time)\n/" CHANGELOG.md
+  #       git add CHANGELOG.md
+  #   - name: create pull request
+  #     run: |
+  #       git config --global user.name "actions-bot"
+  #       git config user.email 'github-actions-bot@google.com'
+  #       git commit -m "Rollback version: from v${{ needs.release-please.outputs.version_tag }} to ${{ needs.get-latest-stable-release-version.outputs.prev_release }}"
+  #       pr_title="Rollback version from ${{ needs.release-please.outputs.version_tag }} to ${{ needs.get-latest-stable-release-version.outputs.prev_release }}"
+  #       pr_body="If current version is not working, use this pull request to revert the version deployed from ${{ needs.release-please.outputs.version_tag }} to ${{ needs.get-latest-stable-release-version.outputs.prev_release }}.
+  #           This will **not** revert changes on main branch. What it does:
+  #           - Change version files to place the previous version.
+  #           - Update argocd deployment so it uses the previous version again."
+  #       # check if branch already exists
+  #       branch_exists=$(git branch | grep -w rollback-branch)
+  #       if [ -z $branch_exists ];then
+  #         git push --set-upstream origin rollback-branch
+  #       else
+  #         # force to override the branch with the new stuff
+  #         git push --set-upstream origin rollback-branch --force
+  #       fi
+  #       pull_request_number=$(gh pr list -s open -H rollback-branch --json number --jq '.[].number')
+  #       # if no pull request exists. Create one.
+  #       if [ -z $pull_request_number ]; then
+  #         gh pr create --title "$pr_title" --body "$pr_body"
+  #       # Pull request exists. Update existing one.
+  #       else
+  #         gh pr edit $pull_request_number --title "$pr_title" --body "$pr_body"
+  #       fi
         
 

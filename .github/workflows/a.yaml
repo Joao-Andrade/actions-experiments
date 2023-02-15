@@ -1,0 +1,68 @@
+name: Updates
+on:
+  workflow_call:
+    inputs:
+      argocd_repository:
+        required: true
+        type: string
+      new_version:
+        required: true
+        type: string
+      file_path:
+        required: true
+        type: string
+      yaml_key_path:
+        required: true
+        type: string
+      app_name:
+        required: true
+        type: string
+      working_directory:
+        required: false
+        type: string
+        default: "./orchestration"
+      is_rollback:
+        required: false
+        type: boolean
+        default: false
+      artifact_name:
+        required: false
+        type: string
+        default: ""
+      artifact_path:
+        required: false
+        type: string
+        default: "./"
+    #secrets:
+    #  ARGOCD_REPOSITORY_ACCESS_TOKEN:
+    #    required: true
+
+jobs:
+  a:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download artifact
+      if: ${{ inputs.artifact_name != '' }}
+      uses: actions/download-artifact@v3
+      with:
+        name: ${{ inputs.artifact_name }}
+        path: ${{ inputs.artifact_path }}
+    - name: Check artifact
+      run: |
+        pwd
+        ls
+        echo "A."
+        ls ./
+    - name: Check inputs
+      run: |
+        echo "${{ inputs.argocd_repository }}"
+        echo "${{ inputs.new_version }}"
+        echo "${{ inputs.file_path }}"
+        echo "${{ inputs.yaml_key_path }}"
+        echo "${{ inputs.app_name }}"
+        echo "${{ inputs.working_directory }}"
+        echo "${{ inputs.is_rollback }}"
+      #env:
+        #working_directory: ${{ inputs.WORKING_DIRECTORY }}
+        #argocd_repository: ${{ inputs.argocd_repository }}
+        #argocd_repository_access_token: ${{ secrets.ARGOCD_REPOSITORY_ACCESS_TOKEN }}
