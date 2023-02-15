@@ -91,6 +91,7 @@ jobs:
       id: release
       with:
         release-type: ${{ env.RELEASE_TYPE }}
+        skip-github-release: true
     - name: Checkout code
       uses: actions/checkout@v3
 
