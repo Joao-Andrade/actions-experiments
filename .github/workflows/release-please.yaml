@@ -26,7 +26,7 @@ on:
       version-file:
         description: 'Path to file that contains the version to increment. Usually useful for type "simple."'
         required: false
-        default: "FALSE"
+        default: "version.txt"
         type: string
     outputs:
       release_created:
