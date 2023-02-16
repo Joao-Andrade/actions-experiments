@@ -54,6 +54,8 @@ jobs:
           esac
           echo "steps[format('release-{0}', inputs.release-type)].outputs[format('{0}--release_created', inputs.path)]"
 
+#----- Releases by release type -----
+
       - uses: google-github-actions/release-please-action@v3
         id: release-node
         if: ${{ inputs.release-type == 'node' }}
@@ -72,8 +74,9 @@ jobs:
           version-file: ${{ inputs.version-file }}
           monorepo-tags: ${{ inputs.use-monorep-tags }}
 
+#----- default versions by release type -----
+
       - uses: actions/checkout@v3
-        if: ${{ inputs.release-type == 'node' }}
         id: git_checkout
 
       - uses: ashley-taylor/read-json-property-action@v1.0
@@ -88,6 +91,8 @@ jobs:
         run: |
           version=$(cat ${{ inputs.version-file }})
           echo "version=$version" >> $GITHUB_OUTPUT
+
+#----- Define outputs tkaing into account each release type -----
 
       - id: release_info
         run: |
