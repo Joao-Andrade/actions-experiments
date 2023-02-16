@@ -89,6 +89,7 @@ jobs:
         if: ${{ inputs.release-type == 'simple' }}
         run: |
           version=$(cat ${{ inputs.version-file }})
+          echo "Default version=$version"
           echo "version=$version" >> $GITHUB_OUTPUT
 
 #----- Define outputs tkaing into account each release type -----
