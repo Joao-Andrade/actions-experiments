@@ -90,7 +90,7 @@ jobs:
       with:
         release-type: ${{ env.RELEASE_TYPE }}
         package-name: experiments_b
-        version-file: version.txt
+        version-file: src_b/version.txt
         monorepo-tags: true
     - name: Checkout code
       uses: actions/checkout@v3
