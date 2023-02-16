@@ -97,7 +97,7 @@ jobs:
     with:
       package: experiment_a
       path: ./
-      release-type: simples
+      release-type: simple
       version-file: src_a/version.txt
 
 
