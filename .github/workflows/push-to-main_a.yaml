@@ -93,7 +93,7 @@ jobs:
 
   release-please:
     name: "Release please"
-    uses: ./.github/workflows/release-please.yml
+    uses: ./.github/workflows/release-please.yaml
     with:
       package: experiment_a
       path: ./
