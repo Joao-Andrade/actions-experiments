@@ -93,7 +93,7 @@ jobs:
             major="${{ steps[format('release-{0}', inputs.release-type)].outputs[format('{0}--major',inputs.path)] }}"
             minor="${{ steps[format('release-{0}', inputs.release-type)].outputs[format('{0}--minor',inputs.path)] }}"
             patch="${{ steps[format('release-{0}', inputs.release-type)].outputs[format('{0}--patch',inputs.path)] }}"
-            version_tag=${{ format('{0}.{1}.{2}',$major,minor,patch) }}
+            version_tag="$major.$minor.patch"
           fi
           echo "Version tag -> $version_tag"
           echo "version_tag=$version_tag" >> $GITHUB_OUTPUT
