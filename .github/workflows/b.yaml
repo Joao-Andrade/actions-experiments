@@ -1,10 +1,12 @@
 name: b
 
 on:
-  #- push
   push:
-    branches:
-      - main
+    paths:
+      - ".github/workflows/b.yaml"
+  #push:
+    #branches:
+    #  - main
 
 env:
   APP_NAME: 'app-name'
