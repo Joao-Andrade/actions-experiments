@@ -35,6 +35,13 @@
 * Rollback to version v1.14.0 (2023-01-24)
 
 
+## [1.25.0](https://github.com/Joao-Andrade/actions-experiments/compare/experiment_a-v1.24.0...experiment_a-v1.25.0) (2023-02-16)
+
+
+### Features
+
+* A. ([1de4b63](https://github.com/Joao-Andrade/actions-experiments/commit/1de4b6341e093dd07995c369dd18d96a15276ea9))
+
 ## [1.24.0](https://github.com/Joao-Andrade/actions-experiments/compare/experiment_a-v1.23.0...experiment_a-v1.24.0) (2023-02-16)
 
 
