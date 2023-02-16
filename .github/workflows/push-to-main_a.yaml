@@ -100,6 +100,17 @@ jobs:
       release-type: simple
       version-file: src_a/version.txt
 
+  check-release-please:
+     name: "Check release-please"
+     needs:
+       - release-please
+     runs-on: ubuntu-latest
+     steps:
+      - name: "Generate the image tag"
+        id: image_tag
+        run: |
+           echo "Released -> ${{ needs.release-please.outputs.release_created }}"
+           echo "Version -> ${{ needs.release-please.outputs.version_tag }}"
 
   # release-please:
   #   runs-on: ubuntu-latest
