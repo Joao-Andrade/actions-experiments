@@ -83,12 +83,18 @@ jobs:
           path: "${{ inputs.path }}/package.json"
           property: version
 
+      - id: simple-txt-version
+        if: ${{ inputs.release-type == 'simple' }}
+        run: |
+          version=$(cat ${{ inputs.version-file }})
+          echo "version=$version" >> $GITHUB_OUTPUT
+
       - id: release_info
         run: |
           release_created=${{ steps[format('release-{0}', inputs.release-type)].outputs[format('{0}--release_created', inputs.path)] || 'false' }}
           echo "release_created -> $release_created"
           echo "release_created=$release_created" >> $GITHUB_OUTPUT
-          version_tag=${{ inputs.release-type == 'node' && steps.package-json-version.outputs.value }} || "1.0.0"
+          version_tag=${{ inputs.release-type == 'node' && steps.package-json-version.outputs.value || steps.simple-txt-version.outputs.version }}
           if [ "$release_created" == 'true' ]; then
             major="${{ steps[format('release-{0}', inputs.release-type)].outputs[format('{0}--major',inputs.path)] }}"
             minor="${{ steps[format('release-{0}', inputs.release-type)].outputs[format('{0}--minor',inputs.path)] }}"
