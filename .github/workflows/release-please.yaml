@@ -55,7 +55,7 @@ jobs:
 
       - uses: google-github-actions/release-please-action@v3
         id: release-node
-        if: ${{ inputs.release-type == "node" }}
+        if: ${{ inputs.release-type == 'node' }}
         with:
           release-type: ${{ inputs.release-type }}
           package-name: ${{ inputs.package }}
@@ -64,7 +64,7 @@ jobs:
 
       - uses: google-github-actions/release-please-action@v3
         id: release-simple
-        if: ${{ inputs.release-type == "simple" }}
+        if: ${{ inputs.release-type == 'simple' }}
         with:
           release-type: ${{ inputs.release-type }}
           package-name: ${{ inputs.package }}
