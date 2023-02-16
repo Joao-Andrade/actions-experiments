@@ -1,7 +1,8 @@
 name: Push to main
 on:
-  - push
-  #push:
+  push:
+    paths:
+      - "src_b/**"
   #  branches:
   #    - main
 
@@ -91,8 +92,8 @@ jobs:
       id: release
       with:
         release-type: ${{ env.RELEASE_TYPE }}
-        package-name: experiments_1
-        version-file: version.txt
+        package-name: experiments_b
+        version-file: src_b/version.txt
     - name: Checkout code
       uses: actions/checkout@v3
 
