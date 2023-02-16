@@ -76,6 +76,19 @@ jobs:
   #         echo "PREV_RELEASE=$(gh release list | awk '$2 == "Latest"' | awk '{print $1}')"
   #         echo "PREV_RELEASE=$(gh release list | awk '$2 == "Latest"' | awk '{print $1}')" >>  $GITHUB_OUTPUT
 
+  # temp-release-please:
+  #   name: "Temp release-please"
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     version_tag: ${{ steps.image_tag.outputs.tag }}
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
+  #     - name: "Generate the image tag"
+  #       id: image_tag
+  #       run: |
+  #         echo "tag=$(git rev-parse --short ${{ github.sha }})" >>  $GITHUB_OUTPUT
+  #         echo "tag=$(git rev-parse --short ${{ github.sha }})"
 
   release-please:
     runs-on: ubuntu-latest
