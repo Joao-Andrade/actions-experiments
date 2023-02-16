@@ -1,4 +1,4 @@
-name: Push to main
+name: Push to main A
 on:
   push:
     paths:
@@ -91,6 +91,7 @@ jobs:
         release-type: ${{ env.RELEASE_TYPE }}
         package-name: experiments_a
         version-file: src_a/version.txt
+        monorepo-tags: true
     - name: Checkout code
       uses: actions/checkout@v3
 
