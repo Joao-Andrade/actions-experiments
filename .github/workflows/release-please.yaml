@@ -39,8 +39,8 @@ on:
 jobs:
   release-please:
     outputs:
-      release_created: ${{ steps.release_info.outputs.value || false }}
-      version_tag: ${{ steps.version_tag.outputs.value }}
+      release_created: ${{ steps.release_info.outputs.release_created || false }}
+      version_tag: ${{ steps.release_info.outputs.version_tag }}
     runs-on: ubuntu-latest
     steps:
       - id: check_inputs
