@@ -96,7 +96,7 @@ jobs:
     uses: ./.github/workflows/release-please.yaml
     with:
       package: experiment_a
-      path: ./
+      path: src_a/
       release-type: simple
       version-file: src_a/version.txt
 
