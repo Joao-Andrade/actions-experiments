@@ -25,6 +25,6 @@ jobs:
           newValue: |
             image:
               tag: "1.0.0"
-      - name: step 1
-        id: step_1
+      - name: step 2
+        id: step_2
         run: cat src_c/yaml.yml
