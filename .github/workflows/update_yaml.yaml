@@ -1,0 +1,30 @@
+name: update yaml
+
+on:
+  push:
+    paths:
+      - ".github/workflows/update_yaml.yaml"
+      - "src_c/yaml.yml"
+
+jobs:
+  update-yaml:
+    name: update the yaml
+    runs-on: ubuntu-latest
+    outputs:
+      argocd_repository: "${{ env.ARGOCD_REPOSITORY }}"
+    steps:
+      - uses: actions/checkout@v3
+      - name: step 1
+        id: step_1
+        run: cat src_c/yaml.yml
+      - name: Patch Application Manifest
+        uses: rkretzschmar/patch-yaml-inside-yaml@v2
+        with:
+          documentFile: src_c/yaml.yml
+          yamlPath: spec.source.helm.values
+          newValue: |
+            image:
+              tag: "1.0.0"
+      - name: step 1
+        id: step_1
+        run: cat src_c/yaml.yml
