@@ -22,9 +22,8 @@ jobs:
         with:
           documentFile: src_c/yaml.yml
           yamlPath: spec.source.helm.values
-          newValue: |
-            image:
-              tag: "1.0.0"
+          yamlInsideYamlPath: image.tag
+          newValue: "1.0.0"
       - name: step 2
         id: step_2
         run: cat src_c/yaml.yml
