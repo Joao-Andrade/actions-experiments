@@ -15,9 +15,14 @@ jobs:
     steps:
       - name: step 1
         id: step_1
-        if: ${{ env.yaml_inside_yaml_key_path == 'No_VaLuE_sO-nO_uSe' }}
-        run: echo "Variable not set..."
+        uses: ./.github/workflows/general_call.yaml
+        with:
+          a_variable: experiment_a
       - name: step 2
         id: step_2
+        if: ${{ env.yaml_inside_yaml_key_path == 'No_VaLuE_sO-nO_uSe' }}
+        run: echo "Variable not set..."
+      - name: step 3
+        id: step_3
         if: ${{ env.yaml_inside_yaml_key_path != 'No_VaLuE_sO-nO_uSe' }}
         run: echo "variable set..."

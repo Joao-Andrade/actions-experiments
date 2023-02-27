@@ -1,0 +1,21 @@
+name: Updates
+on:
+  workflow_call:
+    inputs:
+      a_variable:
+        required: true
+        type: string
+      check_variable:
+        required: false
+        type: boolean
+
+jobs:
+  a:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check inputs
+      run: |
+        echo "${{ inputs.a_variable }}"
+    - name: Check boolean
+      if: ${{ inputs.check_variable == true }}
+      run: echo "A."
