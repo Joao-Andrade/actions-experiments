@@ -15,9 +15,9 @@ jobs:
     steps:
       - name: step 1
         id: step_1
-        if: env.yaml_inside_yaml_key_path == "No_VaLuE_sO-nO_uSe"
+        if: ${{ env.yaml_inside_yaml_key_path == "No_VaLuE_sO-nO_uSe" }}
         run: echo "Variable not set..."
       - name: step 2
         id: step_2
-        if: env.yaml_inside_yaml_key_path != "No_VaLuE_sO-nO_uSe"
+        if: ${{ env.yaml_inside_yaml_key_path != "No_VaLuE_sO-nO_uSe" }}
         run: echo "variable set..."
