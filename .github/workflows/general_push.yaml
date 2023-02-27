@@ -9,15 +9,16 @@ env:
 jobs:
   run-this:
     name: run-this
+    uses: ./.github/workflows/general_call.yaml
+    with:
+      a_variable: experiment_a
+      check_variable: true
+  run-also-this:
+    name: run-also-this
     runs-on: ubuntu-latest
     outputs:
       argocd_repository: "${{ env.ARGOCD_REPOSITORY }}"
     steps:
-      - name: step 1
-        id: step_1
-        uses: ./.github/workflows/general_call.yaml
-        with:
-          a_variable: experiment_a
       - name: step 2
         id: step_2
         if: ${{ env.yaml_inside_yaml_key_path == 'No_VaLuE_sO-nO_uSe' }}
