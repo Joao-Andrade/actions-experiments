@@ -4,7 +4,7 @@ on:
   - push
 
 env:
-  yaml_inside_yaml_key_path: "No_VaLuE_sO-nO_uSe"
+  yaml_inside_yaml_key_path: "No_VaLuE_sO-nO_uSeX"
 
 jobs:
   run-this:
