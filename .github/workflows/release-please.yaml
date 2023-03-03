@@ -118,7 +118,7 @@ jobs:
           if [ ${{ endsWith( inputs.path, '/' ) }} ]; then
             file_path="${{ format('{0}{1}', inputs.path, inputs.version-file) }}"
           else
-            file_path="${{ format('{0}/{1}', inputs.path, inputs-version-file) }}"
+            file_path="${{ format('{0}/{1}', inputs.path, inputs.version-file) }}"
           fi
           version=$(cat $file_path)
           echo "version=$version" >> $GITHUB_OUTPUT
