@@ -1,6 +1,4 @@
 name: "Release please an app"
-# Copied first from inno-contentful annd adapted to work with contentful-storybook
-# NOT tested with node stuff yet, although it should be fine at least for inno-contentful repository.
 
 on:
   workflow_call:
@@ -23,14 +21,24 @@ on:
         required: false
         default: true
         type: boolean
+      node-package-path:
+        description: "Relative path to the node package file from the 'path' variable."
+        required: false
+        default: "package.json"
+        type: string
+      node-package-version-variable:
+        description: "On the node package file, which is the variable that has the version."
+        required: false
+        default: "version"
+        type: string
       version-file:
-        description: 'Path to file that contains the version to increment. Usually useful for type "simple."'
+        description: 'Full Path, from root, to file that contains the version to increment. Usually useful for type "simple."'
         required: false
         default: "version.txt"
         type: string
     outputs:
       release_created:
-        description: "Whether a release was created or not boolean string"
+        description: "Whether a release was created or not as a string with a boolean"
         value: ${{ jobs.release-please.outputs.release_created }}
       version_tag:
         description: "Released semver version string or version found in package.json if no release was created"
@@ -52,6 +60,23 @@ jobs:
               echo "Release type must be: 'node', 'simple'."
               exit 1;;
           esac
+          # Get a "path/package_file"
+          node_package_file_path="${{ inputs.path }}/${{ inputs.node-package-path }}"
+          path="${{ inputs.path }}"
+          if [[ "$path" == */ ]]; then
+            node_package_file_path="${{ inputs.path }}${{ inputs.node-package-path }}"
+          fi
+          echo "Release type selected: ${{ inputs.release-type }}."
+          echo "Possible node package file at (ignore for other release type): $node_package_file_path"
+          echo "node_package_file_path=$node_package_file_path" >> $GITHUB_OUTPUT
+
+          # Useful for the final step of the outputs.
+          release_please_output_prefix=""
+          if [ ${#path} -gt 1 ] && [ "$path" != './' ]; then
+            release_please_output_prefix="${{ format('{0}--', inputs.path) }}"
+          fi
+          echo "release_please_output_prefix=$release_please_output_prefix" >> $GITHUB_OUTPUT
+          
 
 #----- Releases by release type -----
 
@@ -62,7 +87,7 @@ jobs:
           release-type: ${{ inputs.release-type }}
           package-name: ${{ inputs.package }}
           path: ${{ inputs.path }}
-          monorepo-tags: ${{ inputs.use-monorep-tags }}
+          monorepo-tags: ${{ inputs.use-monorepo-tags }}
 
       - uses: google-github-actions/release-please-action@v3
         id: release-simple
@@ -82,29 +107,31 @@ jobs:
         id: package-json-version
         if: ${{ inputs.release-type == 'node' }}
         with:
-          path: "${{ inputs.path }}/package.json"
-          property: version
+          path: "${{ steps.check_inputs.outputs.node_package_file_path }}"
+          property: "${{ inputs.node-package-version-variable }}"
 
       - id: simple-txt-version
         if: ${{ inputs.release-type == 'simple' }}
         run: |
           version=$(cat ${{ inputs.version-file }})
-          echo "Default version=$version"
           echo "version=$version" >> $GITHUB_OUTPUT
 
 #----- Define outputs tkaing into account each release type -----
 
       - id: release_info
         run: |
-          release_created=${{ steps[format('release-{0}', inputs.release-type)].outputs.release_created || 'false' }}
+          release_created="${{ steps[format('release-{0}', inputs.release-type)].outputs[format('{0}release_created', steps.check_inputs.outputs.release_please_output_prefix)] || 'false' }}"
           echo "release_created -> $release_created"
           echo "release_created=$release_created" >> $GITHUB_OUTPUT
           version_tag=${{ inputs.release-type == 'node' && steps.package-json-version.outputs.value || steps.simple-txt-version.outputs.version }}
           if [ "$release_created" == 'true' ]; then
-            major="${{ steps[format('release-{0}', inputs.release-type)].outputs.major }}"
-            minor="${{ steps[format('release-{0}', inputs.release-type)].outputs.minor }}"
-            patch="${{ steps[format('release-{0}', inputs.release-type)].outputs.patch }}"
+            major="${{ steps[format('release-{0}', inputs.release-type)].outputs[format('{0}major', steps.check_inputs.outputs.release_please_output_prefix)] }}"
+            minor="${{ steps[format('release-{0}', inputs.release-type)].outputs[format('{0}minor', steps.check_inputs.outputs.release_please_output_prefix)] }}"
+            patch="${{ steps[format('release-{0}', inputs.release-type)].outputs[format('{0}patch', steps.check_inputs.outputs.release_please_output_prefix)] }}"
             version_tag="$major.$minor.$patch"
           fi
-          echo "Version tag -> $version_tag"
+          echo "Version tag (If no new release, this may not be used. Check next jobs...) -> $version_tag"
           echo "version_tag=$version_tag" >> $GITHUB_OUTPUT
+          echo "----------"
+          echo "For debug purposes - Release output:"
+          echo '${{ toJSON(steps[format('release-{0}', inputs.release-type)].outputs) }}'
