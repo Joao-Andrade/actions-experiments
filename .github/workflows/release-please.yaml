@@ -96,6 +96,7 @@ jobs:
           release-type: ${{ inputs.release-type }}
           package-name: ${{ inputs.package }}
           version-file: ${{ inputs.version-file }}
+          path: ${{ inputs.path }}
           monorepo-tags: ${{ inputs.use-monorep-tags }}
 
 #----- default versions by release type -----
