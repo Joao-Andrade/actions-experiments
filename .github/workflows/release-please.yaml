@@ -115,7 +115,7 @@ jobs:
         if: ${{ inputs.release-type == 'simple' }}
         run: |
           file_path=""
-          if [ ${{ endsWith( inputs.path, "/" ) }} ]; then
+          if [ ${{ endsWith( inputs.path, '/' ) }} ]; then
             file_path="${{ format('{0}{1}', inputs.path, inputs.version-file) }}"
           else
             file_path="${{ format('{0}/{1}', inputs.path, inputs-version-file) }}"
