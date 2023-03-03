@@ -114,13 +114,7 @@ jobs:
       - id: simple-txt-version
         if: ${{ inputs.release-type == 'simple' }}
         run: |
-          file_path=""
-          if [ ${{ endsWith( inputs.path, '/' ) }} ]; then
-            file_path="${{ format('{0}{1}', inputs.path, inputs.version-file) }}"
-          else
-            file_path="${{ format('{0}/{1}', inputs.path, inputs.version-file) }}"
-          fi
-          version=$(cat $file_path)
+          version=$(cat ${{ inputs.version-file }})
           echo "version=$version" >> $GITHUB_OUTPUT
 
 #----- Define outputs tkaing into account each release type -----
