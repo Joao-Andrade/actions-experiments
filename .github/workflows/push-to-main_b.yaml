@@ -19,4 +19,4 @@ jobs:
       package: experiments_b
       path: src_b
       version-file: src_b/version.txt
-      use-monorepo-tags: true
+      use-monorepo-tags: false
