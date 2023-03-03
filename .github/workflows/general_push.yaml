@@ -1,0 +1,28 @@
+name: Always run this
+
+on:
+  - push
+
+env:
+  yaml_inside_yaml_key_path: "No_VaLuE_sO-nO_uSeX"
+
+jobs:
+  run-this:
+    name: run-this
+    uses: ./.github/workflows/general_call.yaml
+    with:
+      a_variable: experiment_a
+  run-also-this:
+    name: run-also-this
+    runs-on: ubuntu-latest
+    outputs:
+      argocd_repository: "${{ env.ARGOCD_REPOSITORY }}"
+    steps:
+      - name: step 2
+        id: step_2
+        if: ${{ env.yaml_inside_yaml_key_path == 'No_VaLuE_sO-nO_uSe' }}
+        run: echo "Variable not set..."
+      - name: step 3
+        id: step_3
+        if: ${{ env.yaml_inside_yaml_key_path != 'No_VaLuE_sO-nO_uSe' }}
+        run: echo "variable set..."

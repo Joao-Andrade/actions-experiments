@@ -1,0 +1,9 @@
+kind: Application
+metadata:
+  name: app_c
+spec:
+  source:
+    helm:
+      values: |
+        image:
+          tag: "1.4.0"
