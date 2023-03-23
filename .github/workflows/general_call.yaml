@@ -18,6 +18,8 @@ jobs:
     - name: Check boolean
       if: ${{ inputs.check_variable == false }}
       run: echo "A."
+    - uses: actions/checkout@v3
+      id: git_checkout
     - name: read yaml
       uses: jbutcher5/read-yaml@main
       with:
