@@ -22,6 +22,6 @@ jobs:
       uses: jbutcher5/read-yaml@main
       with:
         file: 'src_c/yaml.yaml'
-        key-path: 'version'
+        key-path: "version"
 
       
