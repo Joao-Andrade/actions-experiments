@@ -18,3 +18,10 @@ jobs:
     - name: Check boolean
       if: ${{ inputs.check_variable == false }}
       run: echo "A."
+    - name: read yaml
+      uses: jbutcher5/read-yaml@main
+      with:
+        file: 'src_c/yaml.yaml'
+        key-path: 'version'
+
+      
