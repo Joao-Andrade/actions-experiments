@@ -13,7 +13,7 @@ env:
 jobs:
   release-please:
     name: "Release please"
-    uses: ./.github/workflows/release-please.yaml@feat/new_release_type
+    uses: ./.github/workflows/release-please.yaml
     with:
       package: experiment_a
       path: src_a

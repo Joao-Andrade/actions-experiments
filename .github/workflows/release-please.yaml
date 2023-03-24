@@ -36,6 +36,16 @@ on:
         required: false
         default: "version.txt"
         type: string
+      changelog-path:
+        description: 'Path to the changelog file.'
+        required: false
+        default: "CHANGELOG.md"
+        type: string
+      default-branch:
+        description: 'Which branch to create the release against.'
+        required: false
+        default: "main"
+        type: string
     outputs:
       release_created:
         description: "Whether a release was created or not as a string with a boolean"
@@ -52,23 +62,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: check_inputs
+        name: Check inputs
         run: |
+          release_please_type="general"
           case ${{ inputs.release-type }} in
-            node|simple)
-              echo "Release type valid.";;
+            node|helm)
+              release_please_type="general";;
+            simple)
+              release_please_type="simple";;
             *)
               echo "Release type must be: 'node', 'simple'."
               exit 1;;
           esac
+          echo "Release type valid."
+          echo "release_please_type=$release_please_type" >> $GITHUB_OUTPUT
+          # which release please it uses
           # Get a "path/package_file"
           node_package_file_path="${{ inputs.path }}/${{ inputs.node-package-path }}"
+          helm_chart_file_path="${{ inputs.path }}/Chart.yaml"
           path="${{ inputs.path }}"
           if [[ "$path" == */ ]]; then
             node_package_file_path="${{ inputs.path }}${{ inputs.node-package-path }}"
+            helm_chart_file_path="${{ inputs.path }}Chart.yaml"
           fi
           echo "Release type selected: ${{ inputs.release-type }}."
           echo "Possible node package file at (ignore for other release type): $node_package_file_path"
+          echo "Possible helm chart file at (ignore for other release type): $helm_chart_file_path"
           echo "node_package_file_path=$node_package_file_path" >> $GITHUB_OUTPUT
+          echo "helm_chart_file_path=$helm_chart_file_path" >> $GITHUB_OUTPUT
 
           # Useful for the final step of the outputs.
           release_please_output_prefix=""
@@ -81,15 +102,19 @@ jobs:
 #----- Releases by release type -----
 
       - uses: google-github-actions/release-please-action@v3
-        id: release-node
-        if: ${{ inputs.release-type == 'node' }}
+        name: release please for node/helm types
+        id: release-general
+        if: ${{ inputs.release-type == 'node' || inputs.release-type == 'helm' }}
         with:
           release-type: ${{ inputs.release-type }}
           package-name: ${{ inputs.package }}
           path: ${{ inputs.path }}
           monorepo-tags: ${{ inputs.use-monorepo-tags }}
+          default-branch: ${{ inputs.default-branch }}
+          changelog-path: ${{ inputs.changelog-path }}
 
       - uses: google-github-actions/release-please-action@v3
+        name: release please for simple type
         id: release-simple
         if: ${{ inputs.release-type == 'simple' }}
         with:
@@ -98,20 +123,33 @@ jobs:
           version-file: ${{ inputs.version-file }}
           path: ${{ inputs.path }}
           monorepo-tags: ${{ inputs.use-monorepo-tags }}
+          default-branch: ${{ inputs.default-branch }}
+          changelog-path: ${{ inputs.changelog-path }}
 
 #----- default versions by release type -----
 
       - uses: actions/checkout@v3
+        name: checkout code
         id: git_checkout
 
       - uses: ashley-taylor/read-json-property-action@v1.0
+        name: node type - get version
         id: package-json-version
         if: ${{ inputs.release-type == 'node' }}
         with:
           path: "${{ steps.check_inputs.outputs.node_package_file_path }}"
           property: "${{ inputs.node-package-version-variable }}"
+      
+      - uses: jbutcher5/read-yaml@main
+        name: helm type - get version
+        id: helm-chart-version
+        if: ${{ inputs.release-type == 'helm' }}
+        with:
+          file: '${{ steps.check_inputs.outputs.helm_chart_file_path }}'
+          key-path: '["version"]'
 
       - id: simple-txt-version
+        name: simple type - get version
         if: ${{ inputs.release-type == 'simple' }}
         run: |
           file_path=""
@@ -126,19 +164,20 @@ jobs:
 #----- Define outputs tkaing into account each release type -----
 
       - id: release_info
+        name: output if release created and the version
         run: |
-          release_created="${{ steps[format('release-{0}', inputs.release-type)].outputs[format('{0}release_created', steps.check_inputs.outputs.release_please_output_prefix)] || 'false' }}"
+          release_created="${{ steps[format('release-{0}', steps.check_inputs.outputs.release_please_type)].outputs[format('{0}release_created', steps.check_inputs.outputs.release_please_output_prefix)] || 'false' }}"
           echo "release_created -> $release_created"
           echo "release_created=$release_created" >> $GITHUB_OUTPUT
-          version_tag=${{ inputs.release-type == 'node' && steps.package-json-version.outputs.value || steps.simple-txt-version.outputs.version }}
+          version_tag=${{ (inputs.release-type == 'node' && steps.package-json-version.outputs.value) || (inputs.release-type == 'helm' && steps.helm-chart-version.outputs.data) || steps.simple-txt-version.outputs.version }}
           if [ "$release_created" == 'true' ]; then
-            major="${{ steps[format('release-{0}', inputs.release-type)].outputs[format('{0}major', steps.check_inputs.outputs.release_please_output_prefix)] }}"
-            minor="${{ steps[format('release-{0}', inputs.release-type)].outputs[format('{0}minor', steps.check_inputs.outputs.release_please_output_prefix)] }}"
-            patch="${{ steps[format('release-{0}', inputs.release-type)].outputs[format('{0}patch', steps.check_inputs.outputs.release_please_output_prefix)] }}"
+            major="${{ steps[format('release-{0}', steps.check_inputs.outputs.release_please_type)].outputs[format('{0}major', steps.check_inputs.outputs.release_please_output_prefix)] }}"
+            minor="${{ steps[format('release-{0}', steps.check_inputs.outputs.release_please_type)].outputs[format('{0}minor', steps.check_inputs.outputs.release_please_output_prefix)] }}"
+            patch="${{ steps[format('release-{0}', steps.check_inputs.outputs.release_please_type)].outputs[format('{0}patch', steps.check_inputs.outputs.release_please_output_prefix)] }}"
             version_tag="$major.$minor.$patch"
           fi
           echo "Version tag (If no new release, this may not be used. Check next jobs...) -> $version_tag"
           echo "version_tag=$version_tag" >> $GITHUB_OUTPUT
           echo "----------"
           echo "For debug purposes - Release output:"
-          echo '${{ toJSON(steps[format('release-{0}', inputs.release-type)].outputs) }}'
+          echo '${{ toJSON(steps[format('release-{0}', steps.check_inputs.outputs.release_please_type)].outputs) }}'
