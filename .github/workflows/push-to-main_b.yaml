@@ -17,6 +17,6 @@ jobs:
     with:
       release-type: simple
       package: experiments_b
-      path: src_b
+      path: src_b/
       version-file: version.txt
       use-monorepo-tags: false
