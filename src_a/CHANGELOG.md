@@ -2,7 +2,6 @@
 
 ## [1.29.1](https://github.com/Joao-Andrade/actions-experiments/compare/experiment_a-v1.29.0...experiment_a-v1.29.1) (2023-03-03)
 
-
 ### Bug Fixes
 
 * a. ([afa9c6c](https://github.com/Joao-Andrade/actions-experiments/commit/afa9c6cc0f72ac6e6e4030d65a5e17a811ccac11))
