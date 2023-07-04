@@ -21,8 +21,8 @@ jobs:
         uses: rkretzschmar/patch-yaml-inside-yaml@v2
         with:
           documentFile: src_c/yaml.yml
-          yamlPath: spec.source.helm.values
-          yamlInsideYamlPath: image.tag
+          yamlPath: spec.sources[1].version
+          #yamlInsideYamlPath: image.tag
           newValue: "1.0.0"
       - name: step 2
         id: step_2

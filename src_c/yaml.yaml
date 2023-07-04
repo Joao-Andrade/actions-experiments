@@ -8,3 +8,10 @@ spec:
       values: |
         image:
           tag: "1.4.0"
+  sources:
+    - repoURL: a
+      chart: backend
+      version: '1'
+    - repoURL: a
+      chart: frontend
+      version: '1'
