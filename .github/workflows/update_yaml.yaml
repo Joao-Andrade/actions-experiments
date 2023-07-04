@@ -16,14 +16,14 @@ jobs:
       - uses: actions/checkout@v3
       - name: step 1
         id: step_1
-        run: cat src_c/yaml.yml
+        run: cat src_c/yaml.yaml
       - name: Patch Application Manifest
         uses: rkretzschmar/patch-yaml-inside-yaml@v2
         with:
-          documentFile: src_c/yaml.yml
+          documentFile: src_c/yaml.yaml
           yamlPath: spec.sources[1].version
           #yamlInsideYamlPath: image.tag
           newValue: "1.0.0"
       - name: step 2
         id: step_2
-        run: cat src_c/yaml.yml
+        run: cat src_c/yaml.yaml
