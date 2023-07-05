@@ -21,7 +21,7 @@ jobs:
         uses: rkretzschmar/patch-yaml-inside-yaml@v2
         with:
           documentFile: src_c/yaml.yaml
-          yamlPath: spec.sources[?(@.chart=="backend")].version
+          yamlPath: spec.sources[?(@.chart=='frontend')].version
           #yamlInsideYamlPath: image.tag
           newValue: "1.0.0"
       - name: step 2
