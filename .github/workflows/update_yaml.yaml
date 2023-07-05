@@ -34,7 +34,7 @@ jobs:
         uses: Joao-Andrade/patch-yaml-inside-yaml@main
         with:
           documentFile: src_c/yaml.yaml
-          yamlPath: spec.sources[?(@.chart='chart1')].version
+          yamlPath: spec.sources[?(@.chart="chart1")].version
           newValue: "1.0.0"
       - name: Patch spec.source.helm2.values-images[app=a].tag
         uses: Joao-Andrade/patch-yaml-inside-yaml@main
