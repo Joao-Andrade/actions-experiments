@@ -1,17 +1,38 @@
 kind: Application
 metadata:
-  name: app_c
+  name: app_a
 version: 1.0.0
 spec:
+  comment: 'simple direct replace'
+  sample_version: '1.0.1'
   source:
     helm:
+      comment: 'Simple yaml inside yaml'
       values: |
         image:
-          tag: "1.4.0"
+          tag: '1.1.0'
+    helm2:
+      comment: 'yaml inside yaml with array inside'
+      values: |
+        images:
+          - app: a
+            tag: '1.2.0'
+          - app: b
+            tag: '1.3.0'
   sources:
-    - repoURL: a
-      chart: backend
-      version: '1'
-    - repoURL: a
-      chart: frontend
-      version: '1'
+    - comment: 'simple array direct value'
+      chart: chart1
+      version: '1.4.0'
+    - comment: 'array with yaml inside yaml'
+      chart: chart2
+      values: |
+        image:
+          tag: '1.5.0'
+    - comment: 'array with yaml inside yaml with array inside'
+      chart: chart3
+      values: |
+        images:
+          - app: c
+            tag: '1.6.0'
+          - app: d
+            tag: '1.7.0'

@@ -17,13 +17,43 @@ jobs:
       - name: step 1
         id: step_1
         run: cat src_c/yaml.yaml
-      - name: Patch Application Manifest
-        uses: rkretzschmar/patch-yaml-inside-yaml@v2
+      - name: Patch spec.sampleVersion
+        uses: Joao-Andrade/patch-yaml-inside-yaml@main
         with:
           documentFile: src_c/yaml.yaml
-          yamlPath: spec.sources.1.version
-          #yamlInsideYamlPath: image.tag
+          yamlPath: spec.sampleVersion
           newValue: "1.0.0"
-      - name: step 2
-        id: step_2
-        run: cat src_c/yaml.yaml
+      - name: Patch spec.source.helm.values-image.tag
+        uses: Joao-Andrade/patch-yaml-inside-yaml@main
+        with:
+          documentFile: src_c/yaml.yaml
+          yamlPath: spec.source.helm.values
+          yamlInsideYamlPath: image.tag
+          newValue: "1.0.0"
+      - name: Patch spec.source.helm2.values-images[app=a].tag
+        uses: Joao-Andrade/patch-yaml-inside-yaml@main
+        with:
+          documentFile: src_c/yaml.yaml
+          yamlPath: spec.source.helm2.values
+          yamlInsideYamlPath: images[?(@.app='a')].tag
+          newValue: "1.0.0"
+      - name: Patch spec.sources[chart=chart1].version
+        uses: Joao-Andrade/patch-yaml-inside-yaml@main
+        with:
+          documentFile: src_c/yaml.yaml
+          yamlPath: spec.sources[?(@.chart='chart1')].version
+          newValue: "1.0.0"
+      - name: Patch spec.sources[chart=chart2].values-image.tag
+        uses: Joao-Andrade/patch-yaml-inside-yaml@main
+        with:
+          documentFile: src_c/yaml.yaml
+          yamlPath: spec.sources[?(@.chart='chart2')].values
+          yamlInsideYamlPath: images.tag
+          newValue: "1.0.0"
+      - name: Patch spec.sources[chart=chart2].values-images[app=c].tag
+        uses: Joao-Andrade/patch-yaml-inside-yaml@main
+        with:
+          documentFile: src_c/yaml.yaml
+          yamlPath: spec.sources[?(@.chart='chart2')].values
+          yamlInsideYamlPath: images[?(@.app='c')].tag
+          newValue: "1.0.0"
