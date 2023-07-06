@@ -41,19 +41,19 @@ jobs:
         with:
           documentFile: src_c/yaml.yaml
           yamlPath: spec.source.helm2.values
-          yamlInsideYamlPath: "images[?(@.app='a')].tag"
+          yamlInsideYamlPath: "images[?(@.app=='a')].tag"
           newValue: "1.0.0"
       - name: Patch spec.sources[chart=chart2].values-image.tag
         uses: Joao-Andrade/patch-yaml-inside-yaml@main
         with:
           documentFile: src_c/yaml.yaml
-          yamlPath: spec.sources[?(@.chart='chart2')].values
+          yamlPath: spec.sources[?(@.chart=='chart2')].values
           yamlInsideYamlPath: images.tag
           newValue: "1.0.0"
       - name: Patch spec.sources[chart=chart2].values-images[app=c].tag
         uses: Joao-Andrade/patch-yaml-inside-yaml@main
         with:
           documentFile: src_c/yaml.yaml
-          yamlPath: spec.sources[?(@.chart='chart2')].values
+          yamlPath: spec.sources[?(@.chart=='chart2')].values
           yamlInsideYamlPath: images[?(@.app='c')].tag
           newValue: "1.0.0"
