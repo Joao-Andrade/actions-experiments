@@ -50,10 +50,10 @@ jobs:
           yamlPath: spec.sources[?(@.chart=='chart2')].values
           yamlInsideYamlPath: image.tag
           newValue: "1.0.0"
-      - name: Patch spec.sources[chart=chart2].values-images[app=c].tag
+      - name: Patch spec.sources[chart=chart3].values-images[app=c].tag
         uses: Joao-Andrade/patch-yaml-inside-yaml@main
         with:
           documentFile: src_c/yaml.yaml
-          yamlPath: spec.sources[?(@.chart=='chart2')].values
+          yamlPath: spec.sources[?(@.chart=='chart3')].values
           yamlInsideYamlPath: images[?(@.app=='c')].tag
           newValue: "1.0.0"
