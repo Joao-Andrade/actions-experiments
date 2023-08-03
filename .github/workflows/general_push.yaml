@@ -9,11 +9,18 @@ env:
 jobs:
   run-this:
     name: run-this
+    runs-on: ubuntu-latest
+    steps:
+      - name: step a
+        id: step_a
+        run: for i in {1..30}; do echo "A." && exit 0 || sleep 1; done; echo "B"; exit 1
+  run-also-this:
+    name: run-also-this
     uses: ./.github/workflows/general_call.yaml
     with:
       a_variable: experiment_a
-  run-also-this:
-    name: run-also-this
+  run-also-this-too:
+    name: run-also-this-too
     runs-on: ubuntu-latest
     outputs:
       argocd_repository: "${{ env.ARGOCD_REPOSITORY }}"
