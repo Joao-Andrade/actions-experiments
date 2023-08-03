@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: step a
         id: step_a
-        run: for i in {1..30}; do echo "A." && exit 0 || sleep 1; done; echo "B"; exit 1
+        run: for i in {1..30}; do echo "$A." && exit 0 || sleep 1; done; echo "B"; exit 1
   run-also-this:
     name: run-also-this
     uses: ./.github/workflows/general_call.yaml
